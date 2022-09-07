@@ -19,8 +19,6 @@ typedef struct wm_window_t
 	int mouse_y;
 } wm_window_t;
 
-wm_window_t A_WINDOW;
-
 const struct
 {
 	int virtual_key;
