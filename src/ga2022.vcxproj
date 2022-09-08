@@ -139,10 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="heap.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="tlsf\tlsf.c" />
     <ClCompile Include="wm.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="heap.h" />
+    <ClInclude Include="tlsf\tlsf.h" />
     <ClInclude Include="wm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
