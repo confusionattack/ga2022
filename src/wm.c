@@ -1,5 +1,7 @@
 #include "wm.h"
 
+#include "heap.h"
+
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,6 +13,7 @@
 typedef struct wm_window_t
 {
 	HWND hwnd;
+	heap_t* heap;
 	bool quit;
 	bool has_focus;
 	uint32_t mouse_mask;
@@ -118,7 +121,7 @@ static LRESULT CALLBACK _window_proc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-wm_window_t* wm_create()
+wm_window_t* wm_create(heap_t* heap)
 {
 	WNDCLASS wc =
 	{
@@ -147,12 +150,13 @@ wm_window_t* wm_create()
 		return NULL;
 	}
 
-	wm_window_t* win = malloc(sizeof(wm_window_t));
+	wm_window_t* win = heap_alloc(heap, sizeof(wm_window_t), 8);
 	win->has_focus = false;
 	win->hwnd = hwnd;
 	win->key_mask = 0;
 	win->mouse_mask = 0;
 	win->quit = false;
+	win->heap = heap;
 
 	SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)win);
 
@@ -193,5 +197,5 @@ void wm_get_mouse_move(wm_window_t* window, int* x, int* y)
 void wm_destroy(wm_window_t* window)
 {
 	DestroyWindow(window->hwnd);
-	free(window);
+	heap_free(window->heap, window);
 }

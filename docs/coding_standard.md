@@ -8,3 +8,5 @@
 + Document all functions and types defined in engine headers.
 
 + Avoid global and module-level variables.
+
++ All memory will be allocated using `heap_t`.
