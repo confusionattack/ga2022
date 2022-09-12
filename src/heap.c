@@ -1,5 +1,6 @@
 #include "heap.h"
 
+#include "debug.h"
 #include "tlsf/tlsf.h"
 
 #include <stddef.h>
@@ -27,7 +28,9 @@ heap_t* heap_create(size_t grow_increment)
 		MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 	if (!heap)
 	{
-		printf("OUT OF MEMORY!\n");
+		debug_print(
+			k_print_error,
+			"OUT OF MEMORY!\n");
 		return NULL;
 	}
 
@@ -51,7 +54,9 @@ void* heap_alloc(heap_t* heap, size_t size, size_t alignment)
 			MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 		if (!arena)
 		{
-			printf("OUT OF MEMORY!\n");
+			debug_print(
+				k_print_error,
+				"OUT OF MEMORY!\n");
 			return NULL;
 		}
 

@@ -1,5 +1,6 @@
 #include "wm.h"
 
+#include "debug.h"
 #include "heap.h"
 
 #include <stddef.h>
@@ -147,6 +148,9 @@ wm_window_t* wm_create(heap_t* heap)
 
 	if (!hwnd)
 	{
+		debug_print(
+			k_print_warning,
+			"Failed to create window!\n");
 		return NULL;
 	}
 
