@@ -918,37 +918,6 @@ void tlsf_walk_pool(pool_t pool, tlsf_walker walker, void* user)
 	}
 }
 
-int tlsf_pool_free(pool_t pool, size_t* pool_size)
-{
-	block_header_t* block =
-		offset_to_block(pool, -(int)block_header_overhead);
-	
-	if (pool_size != NULL)
-	{
-		*pool_size = 0;
-	}
-
-	int is_free = 0;
-	while (block && !block_is_last(block))
-	{
-		size_t size = 0;
-
-		if (!block_is_free(block))
-		{
-			is_free = 1;
-			size = block_size(block);
-		}
-
-		if (pool_size != NULL)
-		{
-			(*pool_size) += size;
-		}
-
-		block = block_next(block);
-	}
-	return is_free;
-}
-
 size_t tlsf_block_size(void* ptr)
 {
 	size_t size = 0;

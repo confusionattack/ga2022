@@ -82,10 +82,20 @@ void heap_destroy(heap_t* heap)
 	arena_t* arena = heap->arena;
 	while (arena)
 	{
+		tlsf_walk_pool(arena->pool, heap_block_leak_walker, NULL);
+
 		arena_t* next = arena->next;
 		VirtualFree(arena, 0, MEM_RELEASE);
 		arena = next;
 	}
 
 	VirtualFree(heap, 0, MEM_RELEASE);
+}
+
+void heap_block_leak_walker(void* ptr, size_t size, int used, void* user)
+{
+	if (used)
+	{
+		debug_print(k_print_error, "Memory leak of size %zu bytes with callstack:\n", size);
+	}
 }

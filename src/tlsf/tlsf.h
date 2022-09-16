@@ -83,10 +83,6 @@ void tlsf_walk_pool(pool_t pool, tlsf_walker walker, void* user);
 int tlsf_check(tlsf_t tlsf);
 int tlsf_check_pool(pool_t pool);
 
-// Returns nonzero if any block in pool is not free.
-// pool_size (optional) is set to the sum of the size of all unfreed blocks in pool.
-int tlsf_pool_free(pool_t pool, size_t* pool_size);
-
 #if defined(__cplusplus)
 };
 #endif
