@@ -128,14 +128,14 @@ wm_window_t* wm_create(heap_t* heap)
 	{
 		.lpfnWndProc = _window_proc,
 		.hInstance = GetModuleHandle(NULL),
-		.lpszClassName = L"ga2022 window class",
+		.lpszClassName = L"stellarum window class",
 	};
 	RegisterClass(&wc);
 
 	HWND hwnd = CreateWindowEx(
 		0,
 		wc.lpszClassName,
-		L"GA 2022",
+		L"Stellarum",
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
