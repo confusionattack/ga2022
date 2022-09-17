@@ -141,15 +141,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="atomic.c" />
     <ClCompile Include="debug.c" />
     <ClCompile Include="heap.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="mutex.c" />
+    <ClCompile Include="thread.c" />
     <ClCompile Include="tlsf\tlsf.c" />
     <ClCompile Include="wm.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="atomic.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="heap.h" />
+    <ClInclude Include="mutex.h" />
+    <ClInclude Include="thread.h" />
     <ClInclude Include="tlsf\tlsf.h" />
     <ClInclude Include="wm.h" />
   </ItemGroup>

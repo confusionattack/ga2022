@@ -1,5 +1,8 @@
+#include "atomic.h"
 #include "debug.h"
 #include "heap.h"
+#include "mutex.h"
+#include "thread.h"
 #include "wm.h"
 
 #include <stdio.h>
