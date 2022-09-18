@@ -10,7 +10,7 @@
 typedef struct stack_trace_t stack_trace_t;
 
 // Creates a new stack trace.
-// Address is used as a key or identifier for the stack trace.
+// Address is used as an identifier to associate the stack trace with a given pointer.
 stack_trace_t* stack_trace_create(void* address, stack_trace_t* next_stack_trace_node);
 
 // Destroy a previously created stack trace.
