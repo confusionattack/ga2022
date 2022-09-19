@@ -121,7 +121,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Dbghelp.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -138,14 +138,18 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Dbghelp.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="atomic.c" />
     <ClCompile Include="debug.c" />
+    <ClCompile Include="event.c" />
     <ClCompile Include="heap.c" />
+    <ClCompile Include="lecture7.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="mutex.c" />
+    <ClCompile Include="semaphore.c" />
     <ClCompile Include="thread.c" />
     <ClCompile Include="tlsf\tlsf.c" />
     <ClCompile Include="wm.c" />
@@ -153,8 +157,10 @@
   <ItemGroup>
     <ClInclude Include="atomic.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="event.h" />
     <ClInclude Include="heap.h" />
     <ClInclude Include="mutex.h" />
+    <ClInclude Include="semaphore.h" />
     <ClInclude Include="thread.h" />
     <ClInclude Include="tlsf\tlsf.h" />
     <ClInclude Include="wm.h" />
