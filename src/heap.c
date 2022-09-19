@@ -95,7 +95,7 @@ void heap_destroy(heap_t* heap)
 	arena_t* arena = heap->arena;
 	while (arena)
 	{
-		tlsf_walk_pool(arena->pool, heap_block_leak_walker, heap->stack_trace );
+		tlsf_walk_pool(arena->pool, heap_leaked_block_walker, heap->stack_trace );
 
 		arena_t* next = arena->next;
 		VirtualFree(arena, 0, MEM_RELEASE);
@@ -107,7 +107,7 @@ void heap_destroy(heap_t* heap)
 	VirtualFree(heap, 0, MEM_RELEASE);
 }
 
-void heap_block_leak_walker(void* ptr, size_t size, int used, void* user)
+void heap_leaked_block_walker(void* ptr, size_t size, int used, void* user)
 {
 	if (used)
 	{
