@@ -144,12 +144,14 @@
     <ClCompile Include="debug.c" />
     <ClCompile Include="heap.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="stack_trace.c" />
     <ClCompile Include="tlsf\tlsf.c" />
     <ClCompile Include="wm.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h" />
     <ClInclude Include="heap.h" />
+    <ClInclude Include="stack_trace.h" />
     <ClInclude Include="tlsf\tlsf.h" />
     <ClInclude Include="wm.h" />
   </ItemGroup>
