@@ -11,12 +11,12 @@
 
 #include <DbgHelp.h>
 
-#define MAX_STACK_TRACE_SIZE 1024
+#define MAX_STACK_TRACE_FRAME_COUNT 16
 
 typedef struct stack_trace_t
 {
 	void* address;
-	void* stack_trace[MAX_STACK_TRACE_SIZE];
+	void* stack_trace[MAX_STACK_TRACE_FRAME_COUNT];
 	int  frame_count;
 	struct stack_trace_t* next;
 } stack_trace_t;
@@ -36,7 +36,7 @@ stack_trace_t* stack_trace_create(void* address, stack_trace_t* next_stack_trace
 	}
 
 	stack_trace->address = address;
-	stack_trace->frame_count = CaptureStackBackTrace(2, MAX_STACK_TRACE_SIZE, stack_trace->stack_trace, NULL);
+	stack_trace->frame_count = CaptureStackBackTrace(2, MAX_STACK_TRACE_FRAME_COUNT, stack_trace->stack_trace, NULL);
 	stack_trace->next = next_stack_trace_node;
 
 	return stack_trace;

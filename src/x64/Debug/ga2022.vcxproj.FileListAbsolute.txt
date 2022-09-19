@@ -1,1 +1,2 @@
 C:\projects\gamearch-2022\ga2022\src\x64\Debug\ga2022.exe
+C:\Users\Matthew\Documents\Academics\RPI\Game Architecture\GitHub\Stellarum\src\x64\Debug\ga2022.exe
