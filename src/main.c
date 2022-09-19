@@ -20,6 +20,9 @@ int main(int argc, const char* argv[])
 	extern void lecture7_thread_test();
 	lecture7_thread_test();
 
+	extern void lecture7_queue_test();
+	lecture7_queue_test();
+
 	debug_set_print_mask(k_print_warning | k_print_error);
 
 	heap_t* heap = heap_create(2 * 1024 * 1024);
