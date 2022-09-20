@@ -149,6 +149,7 @@
     <ClCompile Include="lecture7.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="mutex.c" />
+    <ClCompile Include="queue.c" />
     <ClCompile Include="semaphore.c" />
     <ClCompile Include="thread.c" />
     <ClCompile Include="tlsf\tlsf.c" />
