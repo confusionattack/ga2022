@@ -23,3 +23,8 @@ void event_wait(event_t* event)
 {
 	WaitForSingleObject(event, INFINITE);
 }
+
+bool event_is_raised(event_t* event)
+{
+	return WaitForSingleObject(event, 0) == WAIT_OBJECT_0;
+}

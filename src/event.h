@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 // Event thread synchronization
 
 // Handle to an event.
@@ -15,3 +17,6 @@ void event_signal(event_t* event);
 
 // Waits for an event to be signaled.
 void event_wait(event_t* event);
+
+// Determines if an event is signaled.
+bool event_is_raised(event_t* event);

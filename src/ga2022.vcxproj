@@ -145,8 +145,10 @@
     <ClCompile Include="atomic.c" />
     <ClCompile Include="debug.c" />
     <ClCompile Include="event.c" />
+    <ClCompile Include="fs.c" />
     <ClCompile Include="heap.c" />
     <ClCompile Include="lecture7.c" />
+    <ClCompile Include="lz4\lz4.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="mutex.c" />
     <ClCompile Include="queue.c" />
@@ -159,8 +161,11 @@
     <ClInclude Include="atomic.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="event.h" />
+    <ClInclude Include="fs.h" />
     <ClInclude Include="heap.h" />
+    <ClInclude Include="lz4\lz4.h" />
     <ClInclude Include="mutex.h" />
+    <ClInclude Include="queue.h" />
     <ClInclude Include="semaphore.h" />
     <ClInclude Include="thread.h" />
     <ClInclude Include="tlsf\tlsf.h" />
