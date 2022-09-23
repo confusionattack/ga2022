@@ -20,8 +20,10 @@ void fs_destroy(fs_t* fs);
 
 // Queue a file read.
 // File at the specified path will be read in full.
+// Memory for the file will be allocated out of the provided heap.
+// It is the calls responsibility to free the memory allocated!
 // Returns a work object.
-fs_work_t* fs_read(fs_t* fs, const char* path, bool null_terminate, bool use_compression);
+fs_work_t* fs_read(fs_t* fs, const char* path, heap_t* heap, bool null_terminate, bool use_compression);
 
 // Queue a file write.
 // File at the specified path will be written in full.

@@ -55,34 +55,34 @@ void fs_destroy(fs_t* fs)
 	heap_free(fs->heap, fs);
 }
 
-fs_work_t* fs_read(fs_t* fs, const char* path, bool null_terminate, bool use_compression)
+fs_work_t* fs_read(fs_t* fs, const char* path, heap_t* heap, bool null_terminate, bool use_compression)
 {
-	fs_work_t* item = heap_alloc(fs->heap, sizeof(fs_work_t), 8);
-	item->heap = fs->heap;
-	item->op = k_fs_work_op_read;
-	strcpy_s(item->path, sizeof(item->path), path);
-	item->buffer = NULL;
-	item->size = 0;
-	item->done = event_create();
-	item->result = 0;
-	item->null_terminate = null_terminate;
-	item->use_compression = use_compression;
-	queue_push(fs->file_queue, item);
-	return item;
+	fs_work_t* work = heap_alloc(fs->heap, sizeof(fs_work_t), 8);
+	work->heap = heap;
+	work->op = k_fs_work_op_read;
+	strcpy_s(work->path, sizeof(work->path), path);
+	work->buffer = NULL;
+	work->size = 0;
+	work->done = event_create();
+	work->result = 0;
+	work->null_terminate = null_terminate;
+	work->use_compression = use_compression;
+	queue_push(fs->file_queue, work);
+	return work;
 }
 
 fs_work_t* fs_write(fs_t* fs, const char* path, const void* buffer, size_t size, bool use_compression)
 {
-	fs_work_t* item = heap_alloc(fs->heap, sizeof(fs_work_t), 8);
-	item->heap = fs->heap;
-	item->op = k_fs_work_op_write;
-	strcpy_s(item->path, sizeof(item->path), path);
-	item->buffer = (void*)buffer;
-	item->size = size;
-	item->done = event_create();
-	item->result = 0;
-	item->null_terminate = false;
-	item->use_compression = use_compression;
+	fs_work_t* work = heap_alloc(fs->heap, sizeof(fs_work_t), 8);
+	work->heap = fs->heap;
+	work->op = k_fs_work_op_write;
+	strcpy_s(work->path, sizeof(work->path), path);
+	work->buffer = (void*)buffer;
+	work->size = size;
+	work->done = event_create();
+	work->result = 0;
+	work->null_terminate = false;
+	work->use_compression = use_compression;
 
 	if (use_compression)
 	{
@@ -90,57 +90,59 @@ fs_work_t* fs_write(fs_t* fs, const char* path, const void* buffer, size_t size,
 	}
 	else
 	{
-		queue_push(fs->file_queue, item);
+		queue_push(fs->file_queue, work);
 	}
 
-	return item;
+	return work;
 }
 
 bool fs_work_is_done(fs_work_t* work)
 {
-	return event_is_raised(work->done);
+	return work ? event_is_raised(work->done) : true;
 }
 
 void fs_work_wait(fs_work_t* work)
 {
-	event_wait(work->done);
+	if (work)
+	{
+		event_wait(work->done);
+	}
 }
 
 int fs_work_get_result(fs_work_t* work)
 {
-	event_wait(work->done);
-	return work->result;
+	fs_work_wait(work);
+	return work ? work->result : -1;
 }
 
 void* fs_work_get_buffer(fs_work_t* work)
 {
-	event_wait(work->done);
-	return work->buffer;
+	fs_work_wait(work);
+	return work ? work->buffer : NULL;
 }
 
 size_t fs_work_get_size(fs_work_t* work)
 {
-	event_wait(work->done);
-	return work->size;
+	fs_work_wait(work);
+	return work ? work->size : 0;
 }
 
 void fs_work_destroy(fs_work_t* work)
 {
-	event_wait(work->done);
-	event_destroy(work->done);
-	if (work->op == k_fs_work_op_read)
+	if (work)
 	{
-		heap_free(work->heap, work->buffer);
+		event_wait(work->done);
+		event_destroy(work->done);
+		heap_free(work->heap, work);
 	}
-	heap_free(work->heap, work);
 }
 
-static void file_read(fs_work_t* item)
+static void file_read(fs_work_t* work)
 {
 	wchar_t wide_path[1024];
-	if (MultiByteToWideChar(CP_UTF8, 0, item->path, -1, wide_path, sizeof(wide_path)) <= 0)
+	if (MultiByteToWideChar(CP_UTF8, 0, work->path, -1, wide_path, sizeof(wide_path)) <= 0)
 	{
-		item->result = -1;
+		work->result = -1;
 		return;
 	}
 
@@ -148,51 +150,51 @@ static void file_read(fs_work_t* item)
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (handle == INVALID_HANDLE_VALUE)
 	{
-		item->result = GetLastError();
+		work->result = GetLastError();
 		return;
 	}
 
-	if (!GetFileSizeEx(handle, (PLARGE_INTEGER)&item->size))
+	if (!GetFileSizeEx(handle, (PLARGE_INTEGER)&work->size))
 	{
-		item->result = GetLastError();
+		work->result = GetLastError();
 		CloseHandle(handle);
 		return;
 	}
 
-	item->buffer = heap_alloc(item->heap, item->null_terminate ? item->size + 1 : item->size, 8);
+	work->buffer = heap_alloc(work->heap, work->null_terminate ? work->size + 1 : work->size, 8);
 
 	DWORD bytes_read = 0;
-	if (!ReadFile(handle, item->buffer, (DWORD)item->size, &bytes_read, NULL))
+	if (!ReadFile(handle, work->buffer, (DWORD)work->size, &bytes_read, NULL))
 	{
-		item->result = GetLastError();
+		work->result = GetLastError();
 		CloseHandle(handle);
 		return;
 	}
 
-	item->size = bytes_read;
-	if (item->null_terminate)
+	work->size = bytes_read;
+	if (work->null_terminate)
 	{
-		((char*)item->buffer)[bytes_read] = 0;
+		((char*)work->buffer)[bytes_read] = 0;
 	}
 
 	CloseHandle(handle);
 
-	if (item->use_compression)
+	if (work->use_compression)
 	{
-		// HOMEWORK 2: Queue file write work on decompression queue!
+		// HOMEWORK 2: Queue file read work on decompression queue!
 	}
 	else
 	{
-		event_signal(item->done);
+		event_signal(work->done);
 	}
 }
 
-static void file_write(fs_work_t* item)
+static void file_write(fs_work_t* work)
 {
 	wchar_t wide_path[1024];
-	if (MultiByteToWideChar(CP_UTF8, 0, item->path, -1, wide_path, sizeof(wide_path)) <= 0)
+	if (MultiByteToWideChar(CP_UTF8, 0, work->path, -1, wide_path, sizeof(wide_path)) <= 0)
 	{
-		item->result = -1;
+		work->result = -1;
 		return;
 	}
 
@@ -200,23 +202,23 @@ static void file_write(fs_work_t* item)
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (handle == INVALID_HANDLE_VALUE)
 	{
-		item->result = GetLastError();
+		work->result = GetLastError();
 		return;
 	}
 
 	DWORD bytes_written = 0;
-	if (!WriteFile(handle, item->buffer, (DWORD)item->size, &bytes_written, NULL))
+	if (!WriteFile(handle, work->buffer, (DWORD)work->size, &bytes_written, NULL))
 	{
-		item->result = GetLastError();
+		work->result = GetLastError();
 		CloseHandle(handle);
 		return;
 	}
 
-	item->size = bytes_written;
+	work->size = bytes_written;
 
 	CloseHandle(handle);
 
-	event_signal(item->done);
+	event_signal(work->done);
 }
 
 static int file_thread_func(void* user)
@@ -224,19 +226,19 @@ static int file_thread_func(void* user)
 	fs_t* fs = user;
 	while (true)
 	{
-		fs_work_t* item = queue_pop(fs->file_queue);
-		if (item == NULL)
+		fs_work_t* work = queue_pop(fs->file_queue);
+		if (work == NULL)
 		{
 			break;
 		}
 		
-		switch (item->op)
+		switch (work->op)
 		{
 		case k_fs_work_op_read:
-			file_read(item);
+			file_read(work);
 			break;
 		case k_fs_work_op_write:
-			file_write(item);
+			file_write(work);
 			break;
 		}
 	}

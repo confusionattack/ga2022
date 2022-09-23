@@ -2,11 +2,11 @@
 
 Due: September 29th 2022 at 11:59pm
 
-Extend our file system (fs.c) to support reading and writing compressed files.
+Extend our file system (`fs.c`) to support reading and writing compressed files.
 Use LZ4 (already in the tree) to compress/decompress the data. Compression and
 decompression operations should be asynchronous -- use a *separate* queue.
 
-The user will pass a flag to fs_read and fs_write indicating whether or not
+The user will pass a flag to `fs_read` and `fs_write` indicating whether or not
 they want compression. For example, writing a compressed file:
 
 ```
@@ -18,7 +18,7 @@ fs_work_destroy(work);
 And reading a compressed file:
 
 ```
-fs_work_t* work = fs_read(fs, "foo.txt", true, true); // Second true means read compressed
+fs_work_t* work = fs_read(fs, "foo.txt", heap, true, true); // Second true means read compressed
 const char* data = fs_work_get_buffer(work);
 assert(data && strcmp(data, "Hello world!") == 0);
 fs_work_destroy(work);
