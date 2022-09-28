@@ -81,8 +81,6 @@ static void homework2_test_internal(heap_t* heap, fs_t* fs, bool use_compression
 	fs_work_t* write_work = fs_write(fs, "foo.bar", write_data, huck_finn_len, use_compression);
 	fs_work_wait(write_work);
 
-	fs_work_wait(write_work);
-
 	fs_work_t* read_work = fs_read(fs, "foo.bar", heap, true, use_compression);
 
 	assert(fs_work_get_result(write_work) == 0);
