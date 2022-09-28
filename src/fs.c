@@ -192,6 +192,7 @@ static void file_read(fs_t* fs, fs_work_t* work)
 	}
 
 	work->size = bytes_read;
+	// Should not null terminate if the data read is compressed as that will mess with decompression.
 	if (work->null_terminate && !work->use_compression)
 	{
 		((char*)work->buffer)[bytes_read] = 0;
@@ -272,7 +273,7 @@ static void file_write(fs_work_t* work)
 
 	work->size = bytes_written;	
 
-	// Append the uncompressed buffer's size to the end of the file
+	// Append the uncompressed buffer's size to the end of the file if compressed
 	if (work->use_compression)
 	{
 		size_t size = work->tmp_size;
