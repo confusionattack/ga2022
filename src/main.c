@@ -79,6 +79,7 @@ static void homework2_test_internal(heap_t* heap, fs_t* fs, bool use_compression
 
 	const char* write_data = huck_finn;
 	fs_work_t* write_work = fs_write(fs, "foo.bar", write_data, huck_finn_len, use_compression);
+	fs_work_wait(write_work);
 
 	fs_work_wait(write_work);
 
