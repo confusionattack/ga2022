@@ -111,7 +111,7 @@ void stack_trace_log(stack_trace_t* source_stack_trace)
 				SymGetSymFromAddr64(process, address, &sym_addr_displacement, p_symbol);
 				if (SymGetLineFromAddr64(process, address, &displacement, &line))
 				{
-					debug_print(k_print_error, "[%d] %s\n", i, p_symbol->Name);
+					debug_print(k_print_error, "[%d] %s  (line: %ld)\t%s\n", i, p_symbol->Name, line.LineNumber, line.FileName);
 				}
 			}
 		}
