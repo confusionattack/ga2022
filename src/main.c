@@ -19,7 +19,7 @@ int main(int argc, const char* argv[])
 	debug_install_exception_handler();
 
 	homework1_test();
-	homework2_test();
+	//homework2_test();
 
 	debug_set_print_mask(k_print_warning | k_print_error);
 
