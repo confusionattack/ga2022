@@ -84,7 +84,9 @@ static void homework2_test_internal(heap_t* heap, fs_t* fs, bool use_compression
 	fs_work_t* read_work = fs_read(fs, "foo.bar", heap, true, use_compression);
 
 	assert(fs_work_get_result(write_work) == 0);
-	assert(fs_work_get_size(write_work) == huck_finn_len);
+
+	// modified: the file size, it should be different with compression enabled
+	assert(fs_work_get_size(write_work) == huck_finn_len && !use_compression || fs_work_get_size(write_work) != huck_finn_len && use_compression);
 
 	char* read_data = fs_work_get_buffer(read_work);
 	assert(read_data && strcmp(read_data, huck_finn) == 0);
@@ -105,7 +107,6 @@ static void homework2_test()
 	const bool disable_compression = false;
 	homework2_test_internal(heap, fs, disable_compression);
 
-	// HOMEWORK 2: Set enable_compression to true when implemented!
 	const bool enable_compression = true;
 	homework2_test_internal(heap, fs, enable_compression);
 
