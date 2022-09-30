@@ -192,7 +192,7 @@ static void file_read(fs_t* fs, fs_work_t* work)
 	}
 
 	work->size = bytes_read;
-	// Should not null terminate if the data read is compressed as that will mess with decompression.
+	// Should not null terminate if the data read is compressed as that will mess with decompression
 	if (work->null_terminate && !work->use_compression)
 	{
 		((char*)work->buffer)[bytes_read] = 0;
