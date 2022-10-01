@@ -10,11 +10,17 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include "lz4/lz4.h"
+
 typedef struct fs_t
 {
 	heap_t* heap;
+
 	queue_t* file_queue;
 	thread_t* file_thread;
+
+	queue_t* file_compression_queue;
+	thread_t* file_compression_thread;
 } fs_t;
 
 typedef enum fs_work_op_t
@@ -25,6 +31,7 @@ typedef enum fs_work_op_t
 
 typedef struct fs_work_t
 {
+	fs_t* fs;
 	heap_t* heap;
 	fs_work_op_t op;
 	char path[1024];
@@ -37,13 +44,19 @@ typedef struct fs_work_t
 } fs_work_t;
 
 static int file_thread_func(void* user);
+static int file_compression_thread_func(void* user);
 
 fs_t* fs_create(heap_t* heap, int queue_capacity)
 {
 	fs_t* fs = heap_alloc(heap, sizeof(fs_t), 8);
 	fs->heap = heap;
+
 	fs->file_queue = queue_create(heap, queue_capacity);
 	fs->file_thread = thread_create(file_thread_func, fs);
+
+	fs->file_compression_queue = queue_create(heap, queue_capacity);
+	fs->file_compression_thread = thread_create(file_compression_thread_func, fs);
+
 	return fs;
 }
 
@@ -52,12 +65,18 @@ void fs_destroy(fs_t* fs)
 	queue_push(fs->file_queue, NULL);
 	thread_destroy(fs->file_thread);
 	queue_destroy(fs->file_queue);
+
+	queue_push(fs->file_compression_queue, NULL);
+	thread_destroy(fs->file_compression_thread);
+	queue_destroy(fs->file_compression_queue);
+
 	heap_free(fs->heap, fs);
 }
 
 fs_work_t* fs_read(fs_t* fs, const char* path, heap_t* heap, bool null_terminate, bool use_compression)
 {
 	fs_work_t* work = heap_alloc(fs->heap, sizeof(fs_work_t), 8);
+	work->fs = fs;
 	work->heap = heap;
 	work->op = k_fs_work_op_read;
 	strcpy_s(work->path, sizeof(work->path), path);
@@ -74,6 +93,7 @@ fs_work_t* fs_read(fs_t* fs, const char* path, heap_t* heap, bool null_terminate
 fs_work_t* fs_write(fs_t* fs, const char* path, const void* buffer, size_t size, bool use_compression)
 {
 	fs_work_t* work = heap_alloc(fs->heap, sizeof(fs_work_t), 8);
+	work->fs = fs;
 	work->heap = fs->heap;
 	work->op = k_fs_work_op_write;
 	strcpy_s(work->path, sizeof(work->path), path);
@@ -86,7 +106,7 @@ fs_work_t* fs_write(fs_t* fs, const char* path, const void* buffer, size_t size,
 
 	if (use_compression)
 	{
-		// HOMEWORK 2: Queue file write work on compression queue!
+		queue_push(fs->file_compression_queue, work);
 	}
 	else
 	{
@@ -181,7 +201,7 @@ static void file_read(fs_work_t* work)
 
 	if (work->use_compression)
 	{
-		// HOMEWORK 2: Queue file read work on decompression queue!
+		queue_push(work->fs->file_compression_queue, work);
 	}
 	else
 	{
@@ -242,5 +262,62 @@ static int file_thread_func(void* user)
 			break;
 		}
 	}
+	return 0;
+}
+
+static void file_compress(fs_work_t* work)
+{
+	char* result = heap_alloc(work->heap, work->size, 8);
+	int compressed_size = LZ4_compress_default(work->buffer, result, (int)work->size, (int)work->size + 12);
+	work->buffer = result;
+	work->size = compressed_size;
+
+	if (compressed_size == 0) // LZ4_compress_default returns 0 when it fails
+	{
+		work->result = -1;
+	}
+
+	queue_push(work->fs->file_queue, work); // queue another write in order to output our compression
+}
+
+static void file_decompress(fs_work_t* work)
+{
+	char* result = heap_alloc(work->heap, LZ4_MAX_INPUT_SIZE, 8);
+	int uncompressed_size = LZ4_decompress_safe(work->buffer, result, (int)work->size, LZ4_MAX_INPUT_SIZE);
+
+	work->buffer = result;
+	((char*)work->buffer)[uncompressed_size] = 0; // null terminate
+	work->size = uncompressed_size;
+
+	if (uncompressed_size < 0) // LZ4_decompress_safe returns negative values when it fails
+	{
+		work->result = -1;
+	}
+
+	event_signal(work->done);
+}
+
+static int file_compression_thread_func(void* user)
+{
+	fs_t* fs = user;
+	while (true)
+	{
+		fs_work_t* work = queue_pop(fs->file_compression_queue);
+		if (work == NULL)
+		{
+			break;
+		}
+
+		switch (work->op)
+		{
+		case k_fs_work_op_read:
+			file_decompress(work);
+			break;
+		case k_fs_work_op_write:
+			file_compress(work);
+			break;
+		}
+	}
+
 	return 0;
 }
