@@ -53,6 +53,16 @@ __forceinline vec3f_t vec3f_up()
 	return (vec3f_t) { .z = 1.0f };
 }
 
+__forceinline vec3f_t vec3f_negate(vec3f_t v)
+{
+	return (vec3f_t)
+	{
+		.x = -v.x,
+		.x = -v.y,
+		.x = -v.z,
+	};
+}
+
 __forceinline vec3f_t vec3f_add(vec3f_t a, vec3f_t b)
 {
 	return (vec3f_t)
@@ -70,6 +80,16 @@ __forceinline vec3f_t vec3f_sub(vec3f_t a, vec3f_t b)
 		.x = a.x - b.x,
 		.y = a.y - b.y,
 		.z = a.z - b.z
+	};
+}
+
+__forceinline vec3f_t vec3f_mul(vec3f_t a, vec3f_t b)
+{
+	return (vec3f_t)
+	{
+		.x = a.x * b.x,
+		.y = a.y * b.y,
+		.z = a.z * b.z
 	};
 }
 
