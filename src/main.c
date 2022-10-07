@@ -4,6 +4,8 @@
 #include "heap.h"
 #include "mutex.h"
 #include "thread.h"
+#include "timer.h"
+#include "timer_object.h"
 #include "wm.h"
 
 #include <assert.h>
@@ -17,30 +19,37 @@ static void homework2_test();
 int main(int argc, const char* argv[])
 {
 	debug_install_exception_handler();
+	timer_startup();
 
 	homework1_test();
 	homework2_test();
 
-	debug_set_print_mask(k_print_warning | k_print_error);
+	debug_set_print_mask(k_print_info | k_print_warning | k_print_error);
 
 	heap_t* heap = heap_create(2 * 1024 * 1024);
 	wm_window_t* window = wm_create(heap);
+	timer_object_t* root_time = timer_object_create(heap, NULL);
 
 	// THIS IS THE MAIN LOOP!
 	while (!wm_pump(window))
 	{
+		timer_object_update(root_time);
+
 		int x, y;
 		wm_get_mouse_move(window, &x, &y);
 
 		uint32_t mask = wm_get_mouse_mask(window);
 
+		uint32_t now = timer_ticks_to_ms(timer_get_ticks());
 		debug_print(
 			k_print_info,
-			"MOUSE mask=%x move=%dx%d\n",
+			"T=%dms, MOUSE mask=%x move=%dx%d\n",
+			timer_object_get_ms(root_time),
 			mask,
 			x, y);
 	}
 
+	timer_object_destroy(root_time);
 	wm_destroy(window);
 	heap_destroy(heap);
 
@@ -106,8 +115,8 @@ static void homework2_test()
 	homework2_test_internal(heap, fs, disable_compression);
 
 	// HOMEWORK 2: Set enable_compression to true when implemented!
-	const bool enable_compression = true;
-	homework2_test_internal(heap, fs, enable_compression);
+	//const bool enable_compression = true;
+	//homework2_test_internal(heap, fs, enable_compression);
 
 	fs_destroy(fs);
 	heap_destroy(heap);

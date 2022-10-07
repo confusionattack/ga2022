@@ -1,3 +1,5 @@
+#pragma once
+
 // Thread-safe Queue container
 
 // Handle to a thread-safe queue.

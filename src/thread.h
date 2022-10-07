@@ -1,3 +1,5 @@
+#pragma once
+
 // Threading support.
 
 // Handle to a thread.
