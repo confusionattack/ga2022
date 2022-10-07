@@ -1,3 +1,5 @@
+#pragma once
+
 // Recursive mutex thread synchronization
 
 // Handle to a mutex.

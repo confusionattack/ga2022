@@ -156,6 +156,9 @@
     <ClCompile Include="queue.c" />
     <ClCompile Include="semaphore.c" />
     <ClCompile Include="thread.c" />
+    <ClCompile Include="timeofday.c" />
+    <ClCompile Include="timer.c" />
+    <ClCompile Include="timer_object.c" />
     <ClCompile Include="tlsf\tlsf.c" />
     <ClCompile Include="transform.c" />
     <ClCompile Include="wm.c" />
@@ -174,6 +177,9 @@
     <ClInclude Include="queue.h" />
     <ClInclude Include="semaphore.h" />
     <ClInclude Include="thread.h" />
+    <ClInclude Include="timeofday.h" />
+    <ClInclude Include="timer.h" />
+    <ClInclude Include="timer_object.h" />
     <ClInclude Include="tlsf\tlsf.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="vec3f.h" />

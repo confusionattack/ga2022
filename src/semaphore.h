@@ -1,3 +1,5 @@
+#pragma once
+
 // Counting semaphore thread synchronization
 
 // Handle to a semaphore.

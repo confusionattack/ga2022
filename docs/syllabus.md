@@ -49,27 +49,27 @@ Submission of any assignment that is in violation of this policy may result an F
 | 9/1   | Main Loop                   |                                      |
 | 9/6   | Debugging                   | Homework 0: Engine setup             |
 | 9/8   | Memory                      |                                      |
-| 9/12  | Multicore 1                 |                                      |
-| 9/15  | Multicore 2                 | Homework 1: Memory leak detector     |
-| 9/19  | File I/O                    |                                      |
-| 9/22  | Math 1                      |                                      |
-| 9/26  | Math 2                      | Homework 2: Async file decompression |
-| 9/29  | Time                        |                                      |
-| 10/3  | CPUs, Compilers, Assembly 1 |                                      |
-| 10/6  | CPUs, Compilers, Assembly 2 |                                      |
-| 10/13 | Graphics 1                  |                                      |
-| 10/17 | Graphics 2                  | Homework 3: Chrome trace             |
-| 10/20 | Graphics 3                  |                                      |
-| 10/24 | Entities 1                  |                                      |
-| 10/27 | Entities 2                  |                                      |
-| 10/31 | Sockets                     |                                      |
-| 11/3  | Network RPC 1               | Homework 4: Triangle game            |
-| 11/7  | Network RPC 2               |                                      |
-| 11/10 | Network State 1             |                                      |
-| 11/14 | Network State 2             |                                      |
-| 11/17 | Tour of Commercial Engine   | Homework 5: Networked triangle game  |
+| 9/12  | Memory Continued            |                                      |
+| 9/15  | Multicore 1                 |                                      |
+| 9/19  | Multicore 2                 | Homework 1: Memory leak detector     |
+| 9/22  | File I/O                    |                                      |
+| 9/26  | Math 1                      |                                      |
+| 9/29  |                             | Homework 2: Async file decompression |
+| 10/3  | Math 2                      |                                      |
+| 10/6  | Time                        |                                      |
+| 10/13 | CPUs, Compilers, Assembly   |                                      |
+| 10/17 | Graphics 1                  | Guest Lecture                        |
+| 10/20 | Graphics 2                  | Homework 3: Chrome trace             |
+| 10/22 | Graphics 3                  |                                      |
+| 10/27 | Entities 1                  |                                      |
+| 10/31 | Entities 2                  |                                      |
+| 11/3  | Sockets                     |                                      |
+| 11/7  | Network Replication 1       | Homework 4: Triangle game            |
+| 11/10 | Network Replication 2       |                                      |
+| 11/14 | Tour of Commercial Engine   |                                      |
+| 11/17 | Open Studio                 | Homework 5: Final project proposal   |
 | 11/21 | Open Studio                 |                                      |
-| 11/28 | Open Studio                 |                                      |
-| 12/1  | Industry Panel              |                                      |
+| 11/28 | Industry Talk               | Special Guest                        |
+| 12/1  | Open Studio                 |                                      |
 | 12/5  | Open Studio                 |                                      |
 | 12/8  | Final Project Show          | Final Project Due                    |

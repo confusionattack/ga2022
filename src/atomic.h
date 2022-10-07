@@ -1,3 +1,5 @@
+#pragma once
+
 // Atomic operations on 32-bit integers.
 
 // Increment a number atomically.
