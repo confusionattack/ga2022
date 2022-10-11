@@ -84,6 +84,7 @@ void* heap_alloc(heap_t* heap, size_t size, size_t alignment)
 		return NULL;
 	}
 	heap->stack_trace = stack_trace;
+
 	mutex_unlock(heap->mutex);
 
 	return address;
@@ -111,6 +112,7 @@ void heap_destroy(heap_t* heap)
 	}
 
 	stack_trace_destroy(heap->stack_trace);
+
 	mutex_destroy(heap->mutex);
 
 	VirtualFree(heap, 0, MEM_RELEASE);

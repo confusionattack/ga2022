@@ -214,7 +214,6 @@ static void file_read(fs_t* fs, fs_work_t* work)
 	}
 }
 
-<<<<<<< HEAD
 static void file_compress_read(fs_work_t* work)
 {
 	size_t buffer_size = 0;
