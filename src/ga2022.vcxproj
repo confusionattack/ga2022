@@ -160,6 +160,7 @@
     <ClCompile Include="timer.c" />
     <ClCompile Include="timer_object.c" />
     <ClCompile Include="tlsf\tlsf.c" />
+    <ClCompile Include="trace.c" />
     <ClCompile Include="transform.c" />
     <ClCompile Include="wm.c" />
   </ItemGroup>
@@ -181,6 +182,7 @@
     <ClInclude Include="timer.h" />
     <ClInclude Include="timer_object.h" />
     <ClInclude Include="tlsf\tlsf.h" />
+    <ClInclude Include="trace.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="vec3f.h" />
     <ClInclude Include="wm.h" />

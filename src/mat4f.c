@@ -5,6 +5,8 @@
 
 #include <string.h>
 
+#include <xmmintrin.h>
+
 void mat4f_make_identity(mat4f_t* m)
 {
 	memset(m, 0, sizeof(*m));
@@ -100,9 +102,31 @@ void mat4f_mul_inplace(mat4f_t* result, const mat4f_t* m)
 
 void mat4f_transform(const mat4f_t* m, const vec3f_t* in, vec3f_t* out)
 {
+#if 1
 	out->x = in->x * m->data[0][0] + in->y * m->data[1][0] + in->z * m->data[2][0] + m->data[3][0];
 	out->y = in->x * m->data[0][1] + in->y * m->data[1][1] + in->z * m->data[2][1] + m->data[3][1];
 	out->z = in->x * m->data[0][2] + in->y * m->data[1][2] + in->z * m->data[2][2] + m->data[3][2];
+#else
+	__m128 column0 = _mm_load_ps((float*)&m->data[0]);
+	__m128 x = _mm_load_ps1(&in->x);
+	__m128 x_result = _mm_mul_ps(x, column0);
+
+	__m128 column1 = _mm_load_ps((float*)&m->data[1]);
+	__m128 y = _mm_load_ps1(&in->y);
+	__m128 y_result = _mm_mul_ps(y, column1);
+
+	__m128 column2 = _mm_load_ps((float*)&m->data[2]);
+	__m128 z = _mm_load_ps1(&in->z);
+	__m128 z_result = _mm_mul_ps(z, column2);
+
+	__m128 x_plus_y = _mm_add_ps(x_result, y_result);
+	__m128 x_plus_y_plus_z = _mm_add_ps(x_plus_y, z_result);
+	__m128 column3 = _mm_load_ps((float*)&m->data[3]);
+
+	__m128 result = _mm_add_ps(x_plus_y_plus_z, column3);
+
+	_mm_storeu_ps(&out->x, result);
+#endif
 }
 
 void mat4f_transform_inplace(const mat4f_t* m, vec3f_t* v)

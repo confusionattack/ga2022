@@ -8,7 +8,7 @@ typedef struct vec3f_t
 {
 	union
 	{
-		float x, y, z;
+		struct { float x, y, z; };
 		float a[3];
 	};
 } vec3f_t;
