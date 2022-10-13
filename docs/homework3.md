@@ -69,4 +69,4 @@ Files like this can be opened and visualized in the Chrome web browser using `ch
 
 Maximum total points is 15.
 
-Grading criteria and test cases are TBD.
+See homework3_test() in main.c for test case.
