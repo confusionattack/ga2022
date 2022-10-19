@@ -29,13 +29,14 @@ int trace_hash_table_size(trace_hash_table_t* hash_table);
 // this function does nothing.
 void trace_hash_table_push(trace_hash_table_t* hash_table, int key, trace_duration_t* value);
 
-// Pop an item off the stack (LIFO order) associated to the given key.
-// If this key does not have a stack associated with itor if the stack is empty, 
+// Pop a duration event off the stack (LIFO order) associated to the given key 
+// and sets the end time slice of the trace duration that was popped off.
+// If this key does not have a stack associated with it or if the stack is empty, 
 // this function does nothing.
-trace_duration_t* trace_hash_table_pop(trace_hash_table_t* hash_table, int key);
+void trace_hash_table_pop_off_stack(trace_hash_table_t* hash_table, int key);
 
-
-
-
-// Tests
-void hash_table_dump(trace_hash_table_t* table);
+// Pops a duration event off of the queue (FIFO order). 
+// If the queue is empty, NULL is returned.
+// IMPORTANT: This function should only be called if nothing else is expected
+// to be pushed to the hash table.
+trace_duration_t* trace_hash_table_pop_off_events_queue(trace_hash_table_t* hash_table);

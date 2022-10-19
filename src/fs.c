@@ -36,6 +36,8 @@ typedef struct fs_work_t
 	char path[1024];
 	bool null_terminate;
 	bool use_compression;
+	bool clear_file;
+	bool destroy_on_completion;
 	void* buffer;
 	void* tmp_buffer;
 	size_t size;
@@ -85,6 +87,8 @@ fs_work_t* fs_read(fs_t* fs, const char* path, heap_t* heap, bool null_terminate
 	work->result = 0;
 	work->null_terminate = null_terminate;
 	work->use_compression = use_compression;
+	work->clear_file = true;
+	work->destroy_on_completion = false;
 	queue_push(fs->file_queue, work);
 	return work;
 }
@@ -103,6 +107,8 @@ fs_work_t* fs_write(fs_t* fs, const char* path, const void* buffer, size_t size,
 	work->result = 0;
 	work->null_terminate = false;
 	work->use_compression = use_compression;
+	work->clear_file = true;
+	work->destroy_on_completion = false;
 
 	if (use_compression)
 	{
@@ -112,6 +118,29 @@ fs_work_t* fs_write(fs_t* fs, const char* path, const void* buffer, size_t size,
 	{
 		queue_push(fs->file_queue, work);
 	}
+
+	return work;
+}
+
+fs_work_t* fs_write_clear(fs_t* fs, const char* path, const void* buffer, size_t size, bool clear_file, bool destroy_on_completion)
+{
+	fs_work_t* work = heap_alloc(fs->heap, sizeof(fs_work_t), 8);
+	work->heap = fs->heap;
+	work->op = k_fs_work_op_write;
+	strcpy_s(work->path, sizeof(work->path), path);
+	work->buffer = (void*)buffer;
+	work->tmp_buffer = NULL;
+	work->size = size;
+	work->tmp_size = 0;
+	work->done = event_create();
+	work->result = 0;
+	work->null_terminate = false;
+	work->use_compression = false;
+	work->destroy_on_completion = destroy_on_completion;
+	work->clear_file = clear_file;
+
+	
+	queue_push(fs->file_queue, work);
 
 	return work;
 }
@@ -265,8 +294,18 @@ static void file_write(fs_work_t* work)
 		return;
 	}
 
-	HANDLE handle = CreateFile(wide_path, GENERIC_WRITE, FILE_SHARE_WRITE, NULL,
-		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE handle = NULL;
+	if (work->clear_file) 
+	{
+		handle = CreateFile(wide_path, GENERIC_WRITE, FILE_SHARE_WRITE, NULL,
+			CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	}
+	else
+	{
+		handle = CreateFile(wide_path, FILE_APPEND_DATA, FILE_SHARE_WRITE, NULL,
+			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	}
+
 	if (handle == INVALID_HANDLE_VALUE)
 	{
 		work->result = GetLastError();
@@ -332,6 +371,10 @@ static void file_write(fs_work_t* work)
 	}
 
 	event_signal(work->done);
+	if (work->destroy_on_completion)
+	{
+		fs_work_destroy(work);
+	}
 }
 
 static void file_compress_write(fs_t* fs, fs_work_t* work)
