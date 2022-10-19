@@ -145,9 +145,9 @@ void trace_capture_stop(trace_t* trace)
 
 	bool is_first_element = true;
 	
-	while(true)
+	for(int index = 0;; index++)
 	{
-		trace_duration_t* event = trace_hash_table_pop_off_events_queue(trace->event_stacks);
+		trace_duration_t* event = trace_hash_table_get_event(trace->event_stacks, index);
 		if (event == NULL)
 		{
 			break;
@@ -202,8 +202,6 @@ void trace_capture_stop(trace_t* trace)
 				break;
 			}
 		}
-
-		trace_duration_destroy(event);
 
 	}
 

@@ -3,7 +3,6 @@
 #include "atomic.h"
 #include "heap.h"
 #include "mutex.h"
-#include "queue.h"
 #include "stack.h"
 #include "trace.h"
 
@@ -31,7 +30,7 @@ typedef struct trace_hash_table_t
 	int capacity;
 	int size;
 	trace_hash_table_entry_t** table;
-	queue_t* events;
+	trace_duration_t** events;
 } trace_hash_table_t;
 
 
@@ -43,11 +42,12 @@ trace_hash_table_t* trace_hash_table_create(heap_t* heap, int capacity)
 	hash_table->size = 0;
 	hash_table->table = heap_alloc(heap, sizeof(trace_hash_table_entry_t*) * capacity, 8);
 	hash_table->lock = mutex_create();
-	hash_table->events = queue_create(hash_table->heap, capacity);
-	// null each entry of the table
+	hash_table->events = heap_alloc(hash_table->heap, sizeof(trace_hash_table_t*) * capacity, 8);
+	// null each entry of the table and array
 	for (int i = 0; i < capacity; i++)
 	{
 		hash_table->table[i] = NULL;
+		hash_table->events[i] = NULL;
 	}
 	return hash_table;
 }
@@ -58,8 +58,8 @@ void trace_hash_table_destroy(trace_hash_table_t* hash_table)
 	// Free all stored durations event
 	for (int i = 0; i < hash_table->size; i++)
 	{
-		trace_duration_t* duration = queue_pop(hash_table->events);
-		heap_free(hash_table->heap, duration);
+		trace_duration_t* duration = hash_table->events[i];
+		trace_duration_destroy(duration);
 	}
 
 	// Free all entries in table
@@ -72,7 +72,7 @@ void trace_hash_table_destroy(trace_hash_table_t* hash_table)
 	}
 	mutex_unlock(hash_table->lock);
 	mutex_destroy(hash_table->lock);
-	queue_destroy(hash_table->events);
+	heap_free(hash_table->heap, hash_table->events);
 	heap_free(hash_table->heap, hash_table->table);
 	heap_free(hash_table->heap, hash_table);
 }
@@ -129,8 +129,8 @@ void trace_hash_table_push(trace_hash_table_t* hash_table, int key, trace_durati
 		hash_table->table[index] = trace_hash_table_entry_create(hash_table->heap, key);
 		stack_push(hash_table->table[index]->value, value);
 		atomic_increment(&hash_table->table[index]->size);
-		queue_push(hash_table->events, value);
-		atomic_increment(&hash_table->size);
+		int old_size = atomic_increment(&hash_table->size);
+		hash_table->events[old_size] = value;
 		mutex_unlock(hash_table->lock);
 		return;
 	}
@@ -144,8 +144,8 @@ void trace_hash_table_push(trace_hash_table_t* hash_table, int key, trace_durati
 			{
 				stack_push(entry->value, value);
 				atomic_increment(&entry->size);
-				queue_push(hash_table->events, value);
-				atomic_increment(&hash_table->size);
+				int old_size = atomic_increment(&hash_table->size);
+				hash_table->events[old_size] = value;
 			}
 			mutex_unlock(hash_table->lock);
 			return;
@@ -160,8 +160,8 @@ void trace_hash_table_push(trace_hash_table_t* hash_table, int key, trace_durati
 
 	stack_push(entry->value, value);
 	atomic_increment(&entry->size);
-	queue_push(hash_table->events, value);
-	atomic_increment(&hash_table->size);
+	int old_size = atomic_increment(&hash_table->size);
+	hash_table->events[old_size] = value;
 
 	mutex_unlock(hash_table->lock);
 }
@@ -200,17 +200,17 @@ void trace_hash_table_pop_off_stack(trace_hash_table_t* hash_table, int key)
 	mutex_unlock(hash_table->lock);
 }
 
-trace_duration_t* trace_hash_table_pop_off_events_queue(trace_hash_table_t* hash_table)
+trace_duration_t* trace_hash_table_get_event(trace_hash_table_t* hash_table, int index)
 {
 	mutex_lock(hash_table->lock);
-	if (hash_table->size == 0)
+	int size = hash_table->size;
+	if (size == 0 || size <= index || index < 0)
 	{
 		mutex_unlock(hash_table->lock);
 		return NULL;
 	}
 
-	trace_duration_t* duration = queue_pop(hash_table->events);
-	atomic_decrement(&hash_table->size);
+	trace_duration_t* duration = hash_table->events[index];
 	mutex_unlock(hash_table->lock);
 	return duration;
 }

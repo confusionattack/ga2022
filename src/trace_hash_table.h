@@ -35,8 +35,6 @@ void trace_hash_table_push(trace_hash_table_t* hash_table, int key, trace_durati
 // this function does nothing.
 void trace_hash_table_pop_off_stack(trace_hash_table_t* hash_table, int key);
 
-// Pops a duration event off of the queue (FIFO order). 
-// If the queue is empty, NULL is returned.
-// IMPORTANT: This function should only be called if nothing else is expected
-// to be pushed to the hash table.
-trace_duration_t* trace_hash_table_pop_off_events_queue(trace_hash_table_t* hash_table);
+// Returns a duration event off of the array of events. 
+// If the array is empty or if index is out of bounds, NULL is returned.
+trace_duration_t* trace_hash_table_get_event(trace_hash_table_t* hash_table, int index);
