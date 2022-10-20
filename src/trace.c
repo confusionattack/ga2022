@@ -1,10 +1,8 @@
 #include "trace.h"
 
-#include "atomic.h"
 #include "fs.h"
 #include "heap.h"
 #include "mutex.h"
-#include "queue.h"
 #include "timer.h"
 #include "trace_hash_table.h"
 
