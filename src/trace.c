@@ -197,7 +197,6 @@ void trace_capture_stop(trace_t* trace)
 				break;
 			}
 		}
-
 	}
 
 	fs_write_clear(trace->file_system, (char*)trace->path, json_ending, strlen(json_ending), false, true);
