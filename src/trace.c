@@ -21,8 +21,8 @@ typedef struct trace_t
 	int event_capacity;
 	char* path;
 	fs_t* file_system;
-	bool is_recording;
 	mutex_t* recording_lock;
+	bool is_recording;
 } trace_t;
 
 typedef struct trace_duration_t
