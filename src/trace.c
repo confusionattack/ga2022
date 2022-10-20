@@ -143,13 +143,10 @@ void trace_capture_stop(trace_t* trace)
 
 	bool is_first_element = true;
 	
-	for(int index = 0;; index++)
+	int num_events = trace_hash_table_size(trace->event_stacks);
+	for(int index = 0; index < num_events; index++)
 	{
 		trace_duration_t* event = trace_hash_table_get_event(trace->event_stacks, index);
-		if (event == NULL)
-		{
-			break;
-		}
 
 		for (int i = 0; i < 2; i++)
 		{
