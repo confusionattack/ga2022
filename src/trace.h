@@ -3,6 +3,7 @@
 typedef struct heap_t heap_t;
 
 typedef struct trace_t trace_t;
+typedef struct trace_duration_t trace_duration_t;
 
 // Creates a CPU performance tracing system.
 // Event capacity is the maximum number of durations that can be traced.
@@ -10,6 +11,16 @@ trace_t* trace_create(heap_t* heap, int event_capacity);
 
 // Destroys a CPU performance tracing system.
 void trace_destroy(trace_t* trace);
+
+// Creates a duration event for a CPU performance tracing system.
+// Name is the name of the duration event. 
+trace_duration_t* trace_duration_create(trace_t* trace, const char* name);
+
+// Destroys a duration event.
+void trace_duration_destroy(trace_duration_t* duration);
+
+// Sets the end time slice of a given trace duration.
+void trace_duration_set_end_time(trace_duration_t* duration);
 
 // Begin tracing a named duration on the current thread.
 // It is okay to nest multiple durations at once.
