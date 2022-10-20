@@ -178,20 +178,20 @@ void trace_capture_stop(trace_t* trace)
 				time_slice = event->ending_time_slice;
 			}			
 
-
+			size_t num_bites_written = 0;
 			if (is_first_element)
 			{
-				snprintf(buffer, buffer_size, "%s%s%s%c%s%d%s%llu%s", 
+				num_bites_written = snprintf(buffer, buffer_size, "%s%s%s%c%s%d%s%llu%s",
 					name_text, event->name, phase_text, phase, pid_tid_text, event->thread_id, time_scale_text, time_slice, closing_text);
 				is_first_element = false;
 			}
 			else
 			{
-				snprintf(buffer, buffer_size, ",%s%s%s%c%s%d%s%llu%s", 
+				num_bites_written = snprintf(buffer, buffer_size, ",%s%s%s%c%s%d%s%llu%s",
 					name_text, event->name, phase_text, phase, pid_tid_text, event->thread_id, time_scale_text, time_slice, closing_text);
 			}
 
-			fs_work_t* line_worker = fs_write_clear(trace->file_system, (char*)trace->path, (char*) buffer, strlen((char*)buffer), false, false);
+			fs_work_t* line_worker = fs_write_clear(trace->file_system, (char*)trace->path, (char*) buffer, num_bites_written, false, false);
 
 			fs_work_wait(line_worker);
 			fs_work_destroy(line_worker);
