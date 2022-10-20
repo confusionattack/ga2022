@@ -33,8 +33,8 @@ fs_work_t* fs_read(fs_t* fs, const char* path, heap_t* heap, bool null_terminate
 fs_work_t* fs_write(fs_t* fs, const char* path, const void* buffer, size_t size, bool use_compression);
 
 // Queue a file write.
-// File at the specified path will be written in full.
-// If clear_file is set to false, file will be appended to instead of cleared.
+// File at the specified path will be written to.
+// If clear_file is set to false, file will be appended to instead of cleared before being written to.
 // If destroy_on_completion is set to true, the returned fs_work_t* will be destroyed 
 // after its event is fired.
 // Returns a work object.
