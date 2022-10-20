@@ -139,7 +139,6 @@ fs_work_t* fs_write_clear(fs_t* fs, const char* path, const void* buffer, size_t
 	work->destroy_on_completion = destroy_on_completion;
 	work->clear_file = clear_file;
 
-	
 	queue_push(fs->file_queue, work);
 
 	return work;
