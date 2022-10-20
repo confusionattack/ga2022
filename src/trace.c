@@ -137,7 +137,7 @@ void trace_capture_stop(trace_t* trace)
 	char* pid_tid_text = "\", \"pid\":0, \"tid\":\"";
 	char* time_scale_text = "\", \"ts\":\"";
 	char* closing_text = "\"}";
-	char* json_ending = "\n\t]\n}";
+	char* json_ending = "\n\t]\n}\n";
 
 	fs_write_clear(trace->file_system, (char*)trace->path, json_heading, strlen(json_heading), true, true);
 
