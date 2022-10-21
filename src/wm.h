@@ -49,3 +49,6 @@ uint32_t wm_get_key_mask(wm_window_t* window);
 
 // Get relative mouse movement in x and y.
 void wm_get_mouse_move(wm_window_t* window, int* x, int* y);
+
+// Get the raw OS window object.
+void* wm_get_raw_window(wm_window_t* window);

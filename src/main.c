@@ -1,6 +1,7 @@
 #include "atomic.h"
 #include "debug.h"
 #include "fs.h"
+#include "gpu.h"
 #include "heap.h"
 #include "mutex.h"
 #include "thread.h"
@@ -28,6 +29,9 @@ int main(int argc, const char* argv[])
 	heap_t* heap = heap_create(2 * 1024 * 1024);
 	wm_window_t* window = wm_create(heap);
 	timer_object_t* root_time = timer_object_create(heap, NULL);
+
+	gpu_t* gpu = gpu_create(heap, window);
+	gpu_destroy(gpu);
 
 	// THIS IS THE MAIN LOOP!
 	while (!wm_pump(window))

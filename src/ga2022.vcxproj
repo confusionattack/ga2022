@@ -121,7 +121,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Dbghelp.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Dbghelp.lib;winmm.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vulkan</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -146,6 +147,7 @@
     <ClCompile Include="debug.c" />
     <ClCompile Include="event.c" />
     <ClCompile Include="fs.c" />
+    <ClCompile Include="gpu.c" />
     <ClCompile Include="heap.c" />
     <ClCompile Include="lecture7.c" />
     <ClCompile Include="lz4\lz4.c" />
@@ -169,6 +171,7 @@
     <ClInclude Include="debug.h" />
     <ClInclude Include="event.h" />
     <ClInclude Include="fs.h" />
+    <ClInclude Include="gpu.h" />
     <ClInclude Include="heap.h" />
     <ClInclude Include="lz4\lz4.h" />
     <ClInclude Include="mat4f.h" />
@@ -185,6 +188,24 @@
     <ClInclude Include="trace.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="vec3f.h" />
+    <ClInclude Include="vulkan\vk_platform.h" />
+    <ClInclude Include="vulkan\vulkan.h" />
+    <ClInclude Include="vulkan\vulkan_android.h" />
+    <ClInclude Include="vulkan\vulkan_beta.h" />
+    <ClInclude Include="vulkan\vulkan_core.h" />
+    <ClInclude Include="vulkan\vulkan_directfb.h" />
+    <ClInclude Include="vulkan\vulkan_fuchsia.h" />
+    <ClInclude Include="vulkan\vulkan_ggp.h" />
+    <ClInclude Include="vulkan\vulkan_ios.h" />
+    <ClInclude Include="vulkan\vulkan_macos.h" />
+    <ClInclude Include="vulkan\vulkan_metal.h" />
+    <ClInclude Include="vulkan\vulkan_screen.h" />
+    <ClInclude Include="vulkan\vulkan_vi.h" />
+    <ClInclude Include="vulkan\vulkan_wayland.h" />
+    <ClInclude Include="vulkan\vulkan_win32.h" />
+    <ClInclude Include="vulkan\vulkan_xcb.h" />
+    <ClInclude Include="vulkan\vulkan_xlib.h" />
+    <ClInclude Include="vulkan\vulkan_xlib_xrandr.h" />
     <ClInclude Include="wm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
