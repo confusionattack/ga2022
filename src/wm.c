@@ -203,3 +203,8 @@ void wm_destroy(wm_window_t* window)
 	DestroyWindow(window->hwnd);
 	heap_free(window->heap, window);
 }
+
+void* wm_get_raw_window(wm_window_t* window)
+{
+	return window->hwnd;
+}
