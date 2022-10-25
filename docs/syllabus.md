@@ -60,7 +60,7 @@ Submission of any assignment that is in violation of this policy may result an F
 | 10/13 | CPUs, Compilers, Assembly   |                                      |
 | 10/17 | Graphics 1                  | Guest Lecture                        |
 | 10/20 | Graphics 2                  | Homework 3: Chrome trace             |
-| 10/22 | Graphics 3                  |                                      |
+| 10/24 | Graphics 3                  |                                      |
 | 10/27 | Entities 1                  |                                      |
 | 10/31 | Entities 2                  |                                      |
 | 11/3  | Sockets                     |                                      |

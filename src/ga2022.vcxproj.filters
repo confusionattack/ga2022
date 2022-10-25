@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.c" />
+    <ClCompile Include="wm.c" />
+    <ClCompile Include="tlsf\tlsf.c">
+      <Filter>tlsf</Filter>
+    </ClCompile>
+    <ClCompile Include="heap.c" />
+    <ClCompile Include="debug.c" />
+    <ClCompile Include="thread.c" />
+    <ClCompile Include="atomic.c" />
+    <ClCompile Include="mutex.c" />
+    <ClCompile Include="event.c" />
+    <ClCompile Include="semaphore.c" />
+    <ClCompile Include="lecture7.c" />
+    <ClCompile Include="queue.c" />
+    <ClCompile Include="lz4\lz4.c">
+      <Filter>lz4</Filter>
+    </ClCompile>
+    <ClCompile Include="fs.c" />
+    <ClCompile Include="mat4f.c" />
+    <ClCompile Include="quatf.c" />
+    <ClCompile Include="transform.c" />
+    <ClCompile Include="timeofday.c" />
+    <ClCompile Include="timer.c" />
+    <ClCompile Include="timer_object.c" />
+    <ClCompile Include="trace.c" />
+    <ClCompile Include="gpu.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="wm.h" />
+    <ClInclude Include="tlsf\tlsf.h">
+      <Filter>tlsf</Filter>
+    </ClInclude>
+    <ClInclude Include="heap.h" />
+    <ClInclude Include="debug.h" />
+    <ClInclude Include="thread.h" />
+    <ClInclude Include="atomic.h" />
+    <ClInclude Include="mutex.h" />
+    <ClInclude Include="event.h" />
+    <ClInclude Include="semaphore.h" />
+    <ClInclude Include="lz4\lz4.h">
+      <Filter>lz4</Filter>
+    </ClInclude>
+    <ClInclude Include="fs.h" />
+    <ClInclude Include="queue.h" />
+    <ClInclude Include="math.h" />
+    <ClInclude Include="vec3f.h" />
+    <ClInclude Include="mat4f.h" />
+    <ClInclude Include="quatf.h" />
+    <ClInclude Include="transform.h" />
+    <ClInclude Include="timeofday.h" />
+    <ClInclude Include="timer.h" />
+    <ClInclude Include="timer_object.h" />
+    <ClInclude Include="trace.h" />
+    <ClInclude Include="vulkan\vk_platform.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_android.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_beta.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_core.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_directfb.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_fuchsia.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_ggp.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_ios.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_macos.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_metal.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_screen.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_vi.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_wayland.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_win32.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_xcb.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_xlib.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkan\vulkan_xlib_xrandr.h">
+      <Filter>vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="gpu.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="tlsf">
+      <UniqueIdentifier>{d09efcfc-a913-41e4-a95c-5cc913dfea0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lz4">
+      <UniqueIdentifier>{ad162a6b-2f30-41ff-ae44-dac14a17caf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vulkan">
+      <UniqueIdentifier>{8d343a18-c754-454a-8839-6cf794bb3795}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{f745ecd1-0464-406e-90d8-3be2d041f8ec}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="shaders\triangle.frag">
+      <Filter>shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="shaders\triangle.vert">
+      <Filter>shaders</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
