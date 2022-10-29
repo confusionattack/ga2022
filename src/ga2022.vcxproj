@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="atomic.c" />
     <ClCompile Include="debug.c" />
+    <ClCompile Include="ecs.c" />
     <ClCompile Include="event.c" />
     <ClCompile Include="fs.c" />
     <ClCompile Include="gpu.c" />
@@ -177,6 +178,7 @@
   <ItemGroup>
     <ClInclude Include="atomic.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="ecs.h" />
     <ClInclude Include="event.h" />
     <ClInclude Include="fs.h" />
     <ClInclude Include="gpu.h" />
