@@ -165,7 +165,9 @@
     <ClCompile Include="mutex.c" />
     <ClCompile Include="quatf.c" />
     <ClCompile Include="queue.c" />
+    <ClCompile Include="render.c" />
     <ClCompile Include="semaphore.c" />
+    <ClCompile Include="simple_game.c" />
     <ClCompile Include="thread.c" />
     <ClCompile Include="timeofday.c" />
     <ClCompile Include="timer.c" />
@@ -189,7 +191,9 @@
     <ClInclude Include="mutex.h" />
     <ClInclude Include="quatf.h" />
     <ClInclude Include="queue.h" />
+    <ClInclude Include="render.h" />
     <ClInclude Include="semaphore.h" />
+    <ClInclude Include="simple_game.h" />
     <ClInclude Include="thread.h" />
     <ClInclude Include="timeofday.h" />
     <ClInclude Include="timer.h" />

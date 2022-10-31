@@ -64,6 +64,12 @@ gpu_t* gpu_create(heap_t* heap, wm_window_t* window);
 // Destroy the previously created Vulkan.
 void gpu_destroy(gpu_t* gpu);
 
+// Get the number of frames in the swapchain.
+int gpu_get_frame_count(gpu_t* gpu);
+
+// Wait for the GPU to be done all queued work.
+void gpu_wait_until_idle(gpu_t* gpu);
+
 // Binds uniform buffers (and textures if we had them) to a given shader layout.
 gpu_descriptor_t* gpu_descriptor_create(gpu_t* gpu, const gpu_descriptor_info_t* info);
 

@@ -65,7 +65,7 @@ Submission of any assignment that is in violation of this policy may result an F
 | 10/31 | Entities 2                  |                                      |
 | 11/3  | Sockets                     |                                      |
 | 11/7  | Network Replication 1       |                                      |
-| 11/10 | Network Replication 2       | Homework 4: Triangle game            |
+| 11/10 | Network Replication 2       | Homework 4: Frogger game             |
 | 11/14 | Tour of Commercial Engine   |                                      |
 | 11/17 | Open Studio                 | Homework 5: Final project proposal   |
 | 11/21 | Open Studio                 |                                      |
