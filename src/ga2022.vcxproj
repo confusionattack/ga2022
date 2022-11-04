@@ -143,16 +143,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="stack.c" />
-    <ClCompile Include="stack_trace.c" />
-    <ClCompile Include="trace_hash_table.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="stack.h" />
-    <ClInclude Include="stack_trace.h" />
-    <ClInclude Include="trace_hash_table.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="atomic.c" />
     <ClCompile Include="debug.c" />
     <ClCompile Include="event.c" />
@@ -162,6 +152,8 @@
     <ClCompile Include="lecture7.c" />
     <ClCompile Include="lz4\lz4.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="stack.c" />
+    <ClCompile Include="stack_trace.c" />
     <ClCompile Include="mat4f.c" />
     <ClCompile Include="mutex.c" />
     <ClCompile Include="quatf.c" />
@@ -173,6 +165,7 @@
     <ClCompile Include="timer_object.c" />
     <ClCompile Include="tlsf\tlsf.c" />
     <ClCompile Include="trace.c" />
+    <ClCompile Include="trace_hash_table.c" />
     <ClCompile Include="transform.c" />
     <ClCompile Include="wm.c" />
   </ItemGroup>
@@ -183,6 +176,8 @@
     <ClInclude Include="fs.h" />
     <ClInclude Include="gpu.h" />
     <ClInclude Include="heap.h" />
+    <ClInclude Include="stack.h" />
+    <ClInclude Include="stack_trace.h" />
     <ClInclude Include="lz4\lz4.h" />
     <ClInclude Include="mat4f.h" />
     <ClInclude Include="math.h" />
@@ -196,6 +191,7 @@
     <ClInclude Include="timer_object.h" />
     <ClInclude Include="tlsf\tlsf.h" />
     <ClInclude Include="trace.h" />
+    <ClInclude Include="trace_hash_table.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="vec3f.h" />
     <ClInclude Include="vulkan\vk_platform.h" />
