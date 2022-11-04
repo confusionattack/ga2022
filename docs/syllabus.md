@@ -60,12 +60,12 @@ Submission of any assignment that is in violation of this policy may result an F
 | 10/13 | CPUs, Compilers, Assembly   |                                      |
 | 10/17 | Graphics 1                  | Guest Lecture                        |
 | 10/20 | Graphics 2                  | Homework 3: Chrome trace             |
-| 10/22 | Graphics 3                  |                                      |
+| 10/24 | Graphics 3                  |                                      |
 | 10/27 | Entities 1                  |                                      |
 | 10/31 | Entities 2                  |                                      |
 | 11/3  | Sockets                     |                                      |
-| 11/7  | Network Replication 1       | Homework 4: Triangle game            |
-| 11/10 | Network Replication 2       |                                      |
+| 11/7  | Network Replication 1       |                                      |
+| 11/10 | Network Replication 2       | Homework 4: Frogger game             |
 | 11/14 | Tour of Commercial Engine   |                                      |
 | 11/17 | Open Studio                 | Homework 5: Final project proposal   |
 | 11/21 | Open Studio                 |                                      |
