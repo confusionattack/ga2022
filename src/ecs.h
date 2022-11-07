@@ -37,6 +37,9 @@ void ecs_update(ecs_t* ecs);
 // Register a type of component with the entity system.
 int ecs_register_component_type(ecs_t* ecs, const char* name, size_t size_per_component, size_t alignment);
 
+// Return the size of a type of component registered with the sytem.
+size_t ecs_get_component_type_size(ecs_t* ecs, int component_type);
+
 // Spawn an entity with the masked components and return a reference to it.
 ecs_entity_ref_t ecs_entity_add(ecs_t* ecs, uint64_t component_mask);
 

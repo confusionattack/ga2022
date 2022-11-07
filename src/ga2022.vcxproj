@@ -121,7 +121,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Dbghelp.lib;winmm.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Dbghelp.lib;winmm.lib;bcrypt.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>vulkan</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
@@ -163,6 +163,7 @@
     <ClCompile Include="main.c" />
     <ClCompile Include="mat4f.c" />
     <ClCompile Include="mutex.c" />
+    <ClCompile Include="net.c" />
     <ClCompile Include="quatf.c" />
     <ClCompile Include="queue.c" />
     <ClCompile Include="render.c" />
@@ -189,6 +190,7 @@
     <ClInclude Include="mat4f.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="mutex.h" />
+    <ClInclude Include="net.h" />
     <ClInclude Include="quatf.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="render.h" />
@@ -225,12 +227,12 @@
   <ItemGroup>
     <CustomBuild Include="shaders\triangle.frag">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vulkan\glslc.exe %(FullPath) -o %(FullPath).spv</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vulkan\glslc.exe -c "%(FullPath)" -o "%(FullPath).spv"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FullPath).spv</Outputs>
     </CustomBuild>
     <CustomBuild Include="shaders\triangle.vert">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vulkan\glslc.exe %(FullPath) -o %(FullPath).spv</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vulkan\glslc.exe -c "%(FullPath)" -o "%(FullPath).spv"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FullPath).spv</Outputs>
     </CustomBuild>
   </ItemGroup>

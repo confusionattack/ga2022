@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 // Counting semaphore thread synchronization
 
 // Handle to a semaphore.
@@ -14,6 +16,10 @@ void semaphore_destroy(semaphore_t* semaphore);
 // Lowers the semaphore count by one.
 // If the semaphore count is zero, blocks until another thread releases.
 void semaphore_acquire(semaphore_t* semaphore);
+
+// Attempts to lower the semaphore count by one.
+// If the semaphore count is zero, returns false. Otherwise true.
+bool semaphore_try_acquire(semaphore_t* semaphore);
 
 // Raises the semaphore count by one.
 void semaphore_release(semaphore_t* semaphore);
