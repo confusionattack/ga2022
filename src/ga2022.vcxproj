@@ -155,6 +155,7 @@
     <ClCompile Include="debug.c" />
     <ClCompile Include="ecs.c" />
     <ClCompile Include="event.c" />
+    <ClCompile Include="frogger_game.c" />
     <ClCompile Include="fs.c" />
     <ClCompile Include="gpu.c" />
     <ClCompile Include="heap.c" />
@@ -185,6 +186,7 @@
     <ClInclude Include="debug.h" />
     <ClInclude Include="ecs.h" />
     <ClInclude Include="event.h" />
+    <ClInclude Include="frogger_game.h" />
     <ClInclude Include="fs.h" />
     <ClInclude Include="gpu.h" />
     <ClInclude Include="heap.h" />
