@@ -74,9 +74,11 @@ typedef struct frogger_game_t
 
 	gpu_mesh_info_t rect_mesh;
 	gpu_mesh_info_t cube_mesh;
-	gpu_shader_info_t cube_shader;
+	gpu_shader_info_t player_shader;
+	gpu_shader_info_t traffic_shader;
 	fs_work_t* vertex_shader_work;
-	fs_work_t* fragment_shader_work;
+	fs_work_t* traffic_fragment_shader_work;
+	fs_work_t* player_fragment_shader_work;
 } frogger_game_t;
 
 static void load_resources(frogger_game_t* game);
@@ -88,6 +90,7 @@ static void spawn_camera(frogger_game_t* game);
 static void update_players(frogger_game_t* game);
 static void spawn_all_traffic(frogger_game_t* game);
 static void update_traffic(frogger_game_t* game);
+static void update_player_traffic_collision(frogger_game_t* game);
 static void draw_models(frogger_game_t* game);
 
 frogger_game_t* frogger_game_create(heap_t* heap, fs_t* fs, wm_window_t* window, render_t* render)
@@ -130,6 +133,7 @@ void frogger_game_update(frogger_game_t* game)
 	ecs_update(game->ecs);
 	update_players(game);
 	//update_traffic(game);
+	update_player_traffic_collision(game);
 	draw_models(game);
 	render_push_done(game->render);
 }
@@ -137,13 +141,24 @@ void frogger_game_update(frogger_game_t* game)
 static void load_resources(frogger_game_t* game)
 {
 	game->vertex_shader_work = fs_read(game->fs, "shaders/triangle.vert.spv", game->heap, false, false);
-	game->fragment_shader_work = fs_read(game->fs, "shaders/triangle.frag.spv", game->heap, false, false);
-	game->cube_shader = (gpu_shader_info_t)
+	game->traffic_fragment_shader_work = fs_read(game->fs, "shaders/frogger_traffic.frag.spv", game->heap, false, false);
+	game->player_fragment_shader_work = fs_read(game->fs, "shaders/frogger_player.frag.spv", game->heap, false, false);
+
+	game->traffic_shader = (gpu_shader_info_t)
 	{
 		.vertex_shader_data = fs_work_get_buffer(game->vertex_shader_work),
 		.vertex_shader_size = fs_work_get_size(game->vertex_shader_work),
-		.fragment_shader_data = fs_work_get_buffer(game->fragment_shader_work),
-		.fragment_shader_size = fs_work_get_size(game->fragment_shader_work),
+		.fragment_shader_data = fs_work_get_buffer(game->traffic_fragment_shader_work),
+		.fragment_shader_size = fs_work_get_size(game->traffic_fragment_shader_work),
+		.uniform_buffer_count = 1,
+	};
+
+	game->player_shader = (gpu_shader_info_t)
+	{
+		.vertex_shader_data = fs_work_get_buffer(game->vertex_shader_work),
+		.vertex_shader_size = fs_work_get_size(game->vertex_shader_work),
+		.fragment_shader_data = fs_work_get_buffer(game->player_fragment_shader_work),
+		.fragment_shader_size = fs_work_get_size(game->player_fragment_shader_work),
 		.uniform_buffer_count = 1,
 	};
 
@@ -205,7 +220,8 @@ static void load_resources(frogger_game_t* game)
 
 static void unload_resources(frogger_game_t* game)
 {
-	fs_work_destroy(game->fragment_shader_work);
+	fs_work_destroy(game->traffic_fragment_shader_work);
+	fs_work_destroy(game->player_fragment_shader_work);
 	fs_work_destroy(game->vertex_shader_work);
 }
 
@@ -237,7 +253,7 @@ static void spawn_player(frogger_game_t* game, int index)
 
 	model_component_t* model_comp = ecs_entity_get_component(game->ecs, game->player_ent, game->model_type, true);
 	model_comp->mesh_info = &game->cube_mesh;
-	model_comp->shader_info = &game->cube_shader;
+	model_comp->shader_info = &game->player_shader;
 }
 
 static void spawn_all_traffic(frogger_game_t* game)
@@ -295,7 +311,7 @@ static void spawn_traffic(frogger_game_t* game, bool is_truck, bool move_right, 
 	{
 		model_comp->mesh_info = &game->cube_mesh;
 	}
-	model_comp->shader_info = &game->cube_shader;
+	model_comp->shader_info = &game->traffic_shader;
 }
 
 static void spawn_camera(frogger_game_t* game)
@@ -331,12 +347,6 @@ static void update_players(frogger_game_t* game)
 		ecs_query_next(game->ecs, &query))
 	{
 		transform_component_t* transform_comp = ecs_query_get_component(game->ecs, &query, game->transform_type);
-		player_component_t* player_comp = ecs_query_get_component(game->ecs, &query, game->player_type);
-
-		if (player_comp->index && transform_comp->transform.translation.z > 1.0f)	// if the plyer's position reaches this z position, then delete "p2"
-		{
-			ecs_entity_remove(game->ecs, ecs_query_get_entity(game->ecs, &query), false);
-		}
 
 		transform_t move;
 		transform_identity(&move);
@@ -384,8 +394,6 @@ static void update_traffic(frogger_game_t* game)
 	//float dt = (float)timer_object_get_delta_ms(game->timer) * 0.001f;
 	float dt = (float)timer_object_get_delta_ms(game->timer) * 0.005f;
 
-	uint32_t key_mask = wm_get_key_mask(game->window);
-
 	uint64_t k_query_mask = (1ULL << game->transform_type) | (1ULL << game->traffic_type);
 
 	for (ecs_query_t query = ecs_query_create(game->ecs, k_query_mask);
@@ -425,6 +433,94 @@ static void update_traffic(frogger_game_t* game)
 		if (transform_comp->transform.translation.y < -rect_horizontal_clamp)
 		{
 			transform_comp->transform.translation.y = rect_horizontal_clamp;
+		}
+	}
+}
+
+static void update_player_traffic_collision(frogger_game_t* game)
+{
+	uint64_t k_player_query_mask = (1ULL << game->transform_type) | (1ULL << game->player_type);
+	uint64_t k_traffic_query_mask = (1ULL << game->transform_type) | (1ULL << game->traffic_type);
+
+	for (ecs_query_t player_query = ecs_query_create(game->ecs, k_player_query_mask);
+		ecs_query_is_valid(game->ecs, &player_query);
+		ecs_query_next(game->ecs, &player_query))
+	{
+		transform_component_t* transform_comp = ecs_query_get_component(game->ecs, &player_query, game->transform_type);
+
+		vec3f_t player_bounding_box_point_upper_left = {
+			.x = (transform_comp->transform.translation.y - CUBE_EDGE_LEN),
+			.y = (transform_comp->transform.translation.z + CUBE_EDGE_LEN),
+			.z = 0
+		};
+
+		vec3f_t player_bounding_box_point_bottom_right = {
+			.x = (transform_comp->transform.translation.y + CUBE_EDGE_LEN),
+			.y = (transform_comp->transform.translation.z - CUBE_EDGE_LEN),
+			.z = 0
+		};
+
+		// Check if the player has an area > 0
+		if (player_bounding_box_point_upper_left.x != player_bounding_box_point_bottom_right.x &&
+			player_bounding_box_point_upper_left.y != player_bounding_box_point_bottom_right.y)
+		{
+			for (ecs_query_t collision_query = ecs_query_create(game->ecs, k_traffic_query_mask);
+				ecs_query_is_valid(game->ecs, &collision_query);
+				ecs_query_next(game->ecs, &collision_query))
+			{
+				transform_component_t* traffic_transform_comp = ecs_query_get_component(game->ecs, &collision_query, game->transform_type);
+				traffic_component_t* traffic_comp = ecs_query_get_component(game->ecs, &collision_query, game->traffic_type);
+
+				vec3f_t traffic_bounding_box_point_upper_left = {
+				.x = (traffic_transform_comp->transform.translation.y),
+				.y = (traffic_transform_comp->transform.translation.z),
+				.z = 0
+				};
+
+				vec3f_t traffic_bounding_box_point_bottom_right = {
+					.x = (traffic_transform_comp->transform.translation.y),
+					.y = (traffic_transform_comp->transform.translation.z),
+					.z = 0
+				};
+
+				if (traffic_comp->is_truck)
+				{
+					traffic_bounding_box_point_upper_left.x -= RECT_HORIZONTAL_LEN;
+					traffic_bounding_box_point_upper_left.y += CUBE_EDGE_LEN;
+					traffic_bounding_box_point_bottom_right.x += RECT_HORIZONTAL_LEN;
+					traffic_bounding_box_point_bottom_right.y -= CUBE_EDGE_LEN;
+				}
+				else
+				{
+					traffic_bounding_box_point_upper_left.x -= CUBE_EDGE_LEN;
+					traffic_bounding_box_point_upper_left.y += CUBE_EDGE_LEN;
+					traffic_bounding_box_point_bottom_right.x += CUBE_EDGE_LEN;
+					traffic_bounding_box_point_bottom_right.y -= CUBE_EDGE_LEN;
+				}
+
+				// Check if traffic object has no area
+				if (traffic_bounding_box_point_upper_left.x == traffic_bounding_box_point_bottom_right.x ||
+					traffic_bounding_box_point_upper_left.y == traffic_bounding_box_point_bottom_right.y)
+				{
+					continue;
+				}
+
+				// Check if either object is on the left side of the other
+				if (player_bounding_box_point_upper_left.x > traffic_bounding_box_point_bottom_right.x ||
+					traffic_bounding_box_point_upper_left.x > player_bounding_box_point_bottom_right.x)
+				{
+					continue;
+				}
+
+				// Check if either object is above the other
+				if (player_bounding_box_point_bottom_right.y > traffic_bounding_box_point_upper_left.y ||
+					traffic_bounding_box_point_bottom_right.y > player_bounding_box_point_upper_left.y)
+				{
+					continue;
+				}
+				reset_player_position(transform_comp);
+				break;
+			}
 		}
 	}
 }
