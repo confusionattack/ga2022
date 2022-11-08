@@ -31,7 +31,6 @@ int main(int argc, const char* argv[])
 
 	frogger_game_destroy(game);
 
-	net_destroy(net);
 	wm_destroy(window);
 	fs_destroy(fs);
 	heap_destroy(heap);
