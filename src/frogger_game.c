@@ -258,22 +258,21 @@ static void spawn_player(frogger_game_t* game, int index)
 static void spawn_all_traffic(frogger_game_t* game)
 {
 	int index = 0;
-	float offset = 0.25;
 	for (int i = 0; i < 6; i++)
 	{
-		spawn_traffic(game, false, true, index, -HORIZONTAL_CLAMP + offset + (i * 6 * CUBE_EDGE_LEN), -3);
+		spawn_traffic(game, false, true, index, -HORIZONTAL_CLAMP + (i * 6 * CUBE_EDGE_LEN), -3);
 		index++;
 	}
 
 	for (int i = 0; i < 4; i++)
 	{
-		spawn_traffic(game, true, false, index, -HORIZONTAL_CLAMP + offset + (RECT_HORIZONTAL_LEN * 2) + (i * 4 * RECT_HORIZONTAL_LEN), 0);
+		spawn_traffic(game, true, false, index, HORIZONTAL_CLAMP - (RECT_HORIZONTAL_LEN * 2) - (i * 5 * RECT_HORIZONTAL_LEN), 0);
 		index++;
 	}
 
 	for (int i = 0; i < 3; i++)
 	{
-		spawn_traffic(game, false, true, index, -HORIZONTAL_CLAMP + offset + CUBE_EDGE_LEN + (i * 15 * CUBE_EDGE_LEN), 3);
+		spawn_traffic(game, false, true, index, -HORIZONTAL_CLAMP + (CUBE_EDGE_LEN * 2) + (i * 12 * CUBE_EDGE_LEN), 3);
 		index++;
 	}
 }
