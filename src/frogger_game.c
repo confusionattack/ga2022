@@ -132,7 +132,7 @@ void frogger_game_update(frogger_game_t* game)
 	timer_object_update(game->timer);
 	ecs_update(game->ecs);
 	update_players(game);
-	//update_traffic(game);
+	update_traffic(game);
 	update_player_traffic_collision(game);
 	draw_models(game);
 	render_push_done(game->render);
@@ -224,7 +224,6 @@ static void unload_resources(frogger_game_t* game)
 	fs_work_destroy(game->player_fragment_shader_work);
 	fs_work_destroy(game->vertex_shader_work);
 }
-
 
 static void reset_player_position(transform_component_t* player_transform_comp)
 {
@@ -335,7 +334,6 @@ static void spawn_camera(frogger_game_t* game)
 
 static void update_players(frogger_game_t* game)
 {
-	//float dt = (float)timer_object_get_delta_ms(game->timer) * 0.001f;
 	float dt = (float)timer_object_get_delta_ms(game->timer) * 0.0075f;
 
 	uint32_t key_mask = wm_get_key_mask(game->window);
