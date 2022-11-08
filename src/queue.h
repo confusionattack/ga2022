@@ -22,3 +22,8 @@ void queue_push(queue_t* queue, void* item);
 // If the queue is empty, blocks until an item is avaiable.
 // Safe for multiple threads to pop at the same time.
 void* queue_pop(queue_t* queue);
+
+// Pop an item off a queue (FIFO order).
+// If the queue is empty, returns NULL.
+// Safe for multiple threads to pop at the same time.
+void* queue_try_pop(queue_t* queue);

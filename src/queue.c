@@ -50,3 +50,15 @@ void* queue_pop(queue_t* queue)
 	semaphore_release(queue->free_items);
 	return item;
 }
+
+void* queue_try_pop(queue_t* queue)
+{
+	if (semaphore_try_acquire(queue->used_items))
+	{
+		int index = atomic_increment(&queue->head_index) % queue->capacity;
+		void* item = queue->items[index];
+		semaphore_release(queue->free_items);
+		return item;
+	}
+	return NULL;
+}

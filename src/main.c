@@ -1,6 +1,7 @@
 #include "debug.h"
 #include "fs.h"
 #include "heap.h"
+#include "net.h"
 #include "render.h"
 #include "frogger_game.h"
 #include "timer.h"
@@ -30,6 +31,7 @@ int main(int argc, const char* argv[])
 
 	frogger_game_destroy(game);
 
+	net_destroy(net);
 	wm_destroy(window);
 	fs_destroy(fs);
 	heap_destroy(heap);

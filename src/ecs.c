@@ -98,6 +98,11 @@ int ecs_register_component_type(ecs_t* ecs, const char* name, size_t size_per_co
 	return -1;
 }
 
+size_t ecs_get_component_type_size(ecs_t* ecs, int component_type)
+{
+	return ecs->component_type_sizes[component_type];
+}
+
 ecs_entity_ref_t ecs_entity_add(ecs_t* ecs, uint64_t component_mask)
 {
 	for (int i = 0; i < _countof(ecs->entity_states); ++i)
