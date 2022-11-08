@@ -9,8 +9,16 @@
 
 static uint32_t s_mask = 0xffffffff;
 
-static LONG debug_exception_handler(LPEXCEPTION_POINTERS ExceptionInfo)
+static LONG debug_exception_handler(LPEXCEPTION_POINTERS info)
 {
+	// XXX: MS uses 0xE06D7363 to indicate C++ language exception.
+	// We're just to going to ignore them. Sometimes Vulkan throws them on startup?
+	// https://devblogs.microsoft.com/oldnewthing/20100730-00/?p=13273
+	if (info->ExceptionRecord->ExceptionCode == 0xE06D7363)
+	{
+		return EXCEPTION_EXECUTE_HANDLER;
+	}
+
 	debug_print(k_print_error, "Caught exception!\n");
 
 	HANDLE file = CreateFile(L"ga2022-crash.dmp", GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -18,7 +26,7 @@ static LONG debug_exception_handler(LPEXCEPTION_POINTERS ExceptionInfo)
 	{
 		MINIDUMP_EXCEPTION_INFORMATION mini_exception = { 0 };
 		mini_exception.ThreadId = GetCurrentThreadId();
-		mini_exception.ExceptionPointers = ExceptionInfo;
+		mini_exception.ExceptionPointers = info;
 		mini_exception.ClientPointers = FALSE;
 
 		MiniDumpWriteDump(GetCurrentProcess(),

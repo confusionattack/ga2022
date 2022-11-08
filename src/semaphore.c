@@ -19,6 +19,12 @@ void semaphore_acquire(semaphore_t* semaphore)
 	WaitForSingleObject(semaphore, INFINITE);
 }
 
+bool semaphore_try_acquire(semaphore_t* semaphore)
+{
+	DWORD result = WaitForSingleObject(semaphore, 0);
+	return result == WAIT_OBJECT_0;
+}
+
 void semaphore_release(semaphore_t* semaphore)
 {
 	ReleaseSemaphore(semaphore, 1, NULL);
