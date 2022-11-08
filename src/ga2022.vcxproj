@@ -236,6 +236,16 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vulkan\glslc.exe -c "%(FullPath)" -o "%(FullPath).spv"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FullPath).spv</Outputs>
     </CustomBuild>
+    <CustomBuild Include="shaders\frogger_player.frag">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vulkan\glslc.exe -c "%(FullPath)" -o "%(FullPath).spv"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FullPath).spv</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="shaders\frogger_traffic.frag">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vulkan\glslc.exe -c "%(FullPath)" -o "%(FullPath).spv"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FullPath).spv</Outputs>
+    </CustomBuild>
     <CustomBuild Include="shaders\triangle.vert">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vulkan\glslc.exe -c "%(FullPath)" -o "%(FullPath).spv"</Command>
