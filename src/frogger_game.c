@@ -164,14 +164,14 @@ static void load_resources(frogger_game_t* game)
 
 	static vec3f_t cube_verts[] =
 	{
-		{ -0.0f, -CUBE_EDGE_LEN,  CUBE_EDGE_LEN }, { 0.0f, CUBE_EDGE_LEN,  CUBE_EDGE_LEN },
-		{  0.0f, -CUBE_EDGE_LEN,  CUBE_EDGE_LEN }, { 0.0f, 0.0f,  CUBE_EDGE_LEN },
-		{  0.0f,  CUBE_EDGE_LEN,  CUBE_EDGE_LEN }, { 0.0f, CUBE_EDGE_LEN,  0.0f },
-		{ -0.0f,  CUBE_EDGE_LEN,  CUBE_EDGE_LEN }, { 0.0f, 0.0f,  0.0f },
-		{ -0.0f, -CUBE_EDGE_LEN, -CUBE_EDGE_LEN }, { 0.0f, CUBE_EDGE_LEN,  0.0f },
-		{  0.0f, -CUBE_EDGE_LEN, -CUBE_EDGE_LEN }, { 0.0f, 0.0f,  CUBE_EDGE_LEN },
-		{  0.0f,  CUBE_EDGE_LEN, -CUBE_EDGE_LEN }, { 0.0f, CUBE_EDGE_LEN,  CUBE_EDGE_LEN },
-		{ -0.0f,  CUBE_EDGE_LEN, -CUBE_EDGE_LEN }, { 0.0f, 0.0f,  0.0f },
+		{ -1.0f, -CUBE_EDGE_LEN,  CUBE_EDGE_LEN }, { 0.0f, CUBE_EDGE_LEN,  CUBE_EDGE_LEN },
+		{  1.0f, -CUBE_EDGE_LEN,  CUBE_EDGE_LEN }, { 1.0f, 0.0f,  CUBE_EDGE_LEN },
+		{  1.0f,  CUBE_EDGE_LEN,  CUBE_EDGE_LEN }, { 1.0f, CUBE_EDGE_LEN,  0.0f },
+		{ -1.0f,  CUBE_EDGE_LEN,  CUBE_EDGE_LEN }, { 1.0f, 0.0f,  0.0f },
+		{ -1.0f, -CUBE_EDGE_LEN, -CUBE_EDGE_LEN }, { 0.0f, CUBE_EDGE_LEN,  0.0f },
+		{  1.0f, -CUBE_EDGE_LEN, -CUBE_EDGE_LEN }, { 0.0f, 0.0f,  CUBE_EDGE_LEN },
+		{  1.0f,  CUBE_EDGE_LEN, -CUBE_EDGE_LEN }, { 1.0f, CUBE_EDGE_LEN,  CUBE_EDGE_LEN },
+		{ -1.0f,  CUBE_EDGE_LEN, -CUBE_EDGE_LEN }, { 0.0f, 0.0f,  0.0f },
 	};
 	static uint16_t cube_indices[] =
 	{
@@ -199,14 +199,14 @@ static void load_resources(frogger_game_t* game)
 
 	static vec3f_t rect_verts[] =
 	{
-		{ -0.0f, -RECT_HORIZONTAL_LEN,  CUBE_EDGE_LEN }, { 0.0f, RECT_HORIZONTAL_LEN,  CUBE_EDGE_LEN },
-		{  0.0f, -RECT_HORIZONTAL_LEN,  CUBE_EDGE_LEN }, { 0.0f, 0.0f,  CUBE_EDGE_LEN },
-		{  0.0f,  RECT_HORIZONTAL_LEN,  CUBE_EDGE_LEN }, { 0.0f, RECT_HORIZONTAL_LEN,  0.0f },
-		{ -0.0f,  RECT_HORIZONTAL_LEN,  CUBE_EDGE_LEN }, { 0.0f, 0.0f,  0.0f },
-		{ -0.0f, -RECT_HORIZONTAL_LEN, -CUBE_EDGE_LEN }, { 0.0f, RECT_HORIZONTAL_LEN,  0.0f },
-		{  0.0f, -RECT_HORIZONTAL_LEN, -CUBE_EDGE_LEN }, { 0.0f, 0.0f,  CUBE_EDGE_LEN },
-		{  0.0f,  RECT_HORIZONTAL_LEN, -CUBE_EDGE_LEN }, { 0.0f, RECT_HORIZONTAL_LEN,  CUBE_EDGE_LEN },
-		{ -0.0f,  RECT_HORIZONTAL_LEN, -CUBE_EDGE_LEN }, { 0.0f, 0.0f,  0.0f },
+		{ -1.0f, -RECT_HORIZONTAL_LEN,  CUBE_EDGE_LEN }, { 0.0f, RECT_HORIZONTAL_LEN,  CUBE_EDGE_LEN },
+		{  1.0f, -RECT_HORIZONTAL_LEN,  CUBE_EDGE_LEN }, { 1.0f, 0.0f,  CUBE_EDGE_LEN },
+		{  1.0f,  RECT_HORIZONTAL_LEN,  CUBE_EDGE_LEN }, { 1.0f, RECT_HORIZONTAL_LEN,  0.0f },
+		{ -1.0f,  RECT_HORIZONTAL_LEN,  CUBE_EDGE_LEN }, { 1.0f, 0.0f,  0.0f },
+		{ -1.0f, -RECT_HORIZONTAL_LEN, -CUBE_EDGE_LEN }, { 0.0f, RECT_HORIZONTAL_LEN,  0.0f },
+		{  1.0f, -RECT_HORIZONTAL_LEN, -CUBE_EDGE_LEN }, { 0.0f, 0.0f,  CUBE_EDGE_LEN },
+		{  1.0f,  RECT_HORIZONTAL_LEN, -CUBE_EDGE_LEN }, { 1.0f, RECT_HORIZONTAL_LEN,  CUBE_EDGE_LEN },
+		{ -1.0f,  RECT_HORIZONTAL_LEN, -CUBE_EDGE_LEN }, { 0.0f, 0.0f,  0.0f },
 	};
 	game->rect_mesh = (gpu_mesh_info_t)
 	{
@@ -220,6 +220,9 @@ static void load_resources(frogger_game_t* game)
 
 static void unload_resources(frogger_game_t* game)
 {
+	heap_free(game->heap, fs_work_get_buffer(game->traffic_fragment_shader_work));
+	heap_free(game->heap, fs_work_get_buffer(game->player_fragment_shader_work));
+	heap_free(game->heap, fs_work_get_buffer(game->vertex_shader_work));
 	fs_work_destroy(game->traffic_fragment_shader_work);
 	fs_work_destroy(game->player_fragment_shader_work);
 	fs_work_destroy(game->vertex_shader_work);
@@ -323,7 +326,10 @@ static void spawn_camera(frogger_game_t* game)
 	strcpy_s(name_comp->name, sizeof(name_comp->name), "camera");
 
 	camera_component_t* camera_comp = ecs_entity_get_component(game->ecs, game->camera_ent, game->camera_type, true);
-	mat4f_make_perspective(&camera_comp->projection, (float)M_PI / 2.0f, 16.0f / 9.0f, 0.1f, 100.0f);
+
+	float width = 8.9f;
+	float height = 5.0f;
+	mat4f_make_orthographic(&camera_comp->projection, -width, width, -height, height, 0.1f, 100.0f);
 
 	vec3f_t eye_pos = vec3f_scale(vec3f_forward(), -5.0f);
 	vec3f_t forward = vec3f_forward();
@@ -388,7 +394,6 @@ static void update_players(frogger_game_t* game)
 
 static void update_traffic(frogger_game_t* game)
 {
-	//float dt = (float)timer_object_get_delta_ms(game->timer) * 0.001f;
 	float dt = (float)timer_object_get_delta_ms(game->timer) * 0.005f;
 
 	uint64_t k_query_mask = (1ULL << game->transform_type) | (1ULL << game->traffic_type);
