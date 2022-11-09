@@ -668,6 +668,7 @@ void gpu_destroy(gpu_t* gpu)
 			if (gpu->frames[i].cmd_buffer)
 			{
 				vkFreeCommandBuffers(gpu->logical_device, gpu->cmd_pool, 1, &gpu->frames[i].cmd_buffer->buffer);
+				heap_free(gpu->heap, gpu->frames[i].cmd_buffer);
 			}
 			if (gpu->frames[i].frame_buffer)
 			{

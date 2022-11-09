@@ -101,6 +101,7 @@ void render_destroy(render_t* render)
 {
 	queue_push(render->queue, NULL);
 	thread_destroy(render->thread);
+	queue_destroy(render->queue);
 	heap_free(render->heap, render);
 }
 
@@ -307,6 +308,8 @@ static void destroy_stale_data(render_t* render)
 				gpu_descriptor_destroy(render->gpu, render->instances[i].descriptors[f]);
 				gpu_uniform_buffer_destroy(render->gpu, render->instances[i].uniform_buffers[f]);
 			}
+			heap_free(render->heap, render->instances[i].descriptors);
+			heap_free(render->heap, render->instances[i].uniform_buffers);
 			render->instances[i] = render->instances[render->instance_count - 1];
 			render->instance_count--;
 		}
