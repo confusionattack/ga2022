@@ -36,20 +36,9 @@ typedef struct ecs_t
 ecs_t* ecs_create(heap_t* heap)
 {
 	ecs_t* ecs = heap_alloc(heap, sizeof(ecs_t), 8);
+	memset(ecs, 0, sizeof(*ecs));
 	ecs->heap = heap;
-	ecs->global_sequence = 0;
-	for (int i = 0; i < _countof(ecs->components); ++i)
-	{
-		ecs->components[i] = NULL;
-	}
-	for (int i = 0; i < _countof(ecs->entity_states); ++i)
-	{
-		ecs->entity_states[i] = k_entity_unused;
-	}
-	for (int i = 0; i < _countof(ecs->component_masks); ++i)
-	{
-		ecs->component_masks[i] = 0;
-	}
+	ecs->global_sequence = 1;
 	return ecs;
 }
 

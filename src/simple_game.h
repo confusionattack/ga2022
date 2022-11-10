@@ -11,7 +11,7 @@ typedef struct render_t render_t;
 typedef struct wm_window_t wm_window_t;
 
 // Create an instance of simple test game.
-simple_game_t* simple_game_create(heap_t* heap, fs_t* fs, wm_window_t* window, render_t* render);
+simple_game_t* simple_game_create(heap_t* heap, fs_t* fs, wm_window_t* window, render_t* render, int argc, const char** argv);
 
 // Destroy an instance of simple test game.
 void simple_game_destroy(simple_game_t* game);

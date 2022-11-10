@@ -23,6 +23,11 @@ void queue_push(queue_t* queue, void* item);
 // Safe for multiple threads to pop at the same time.
 void* queue_pop(queue_t* queue);
 
+// Push an item onto a queue if space is available.
+// If the queue is full, returns false.
+// Safe for multiple threads to push at the same time.
+bool queue_try_push(queue_t* queue, void* item);
+
 // Pop an item off a queue (FIFO order).
 // If the queue is empty, returns NULL.
 // Safe for multiple threads to pop at the same time.
