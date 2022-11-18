@@ -6,12 +6,16 @@
 #include "timer.h"
 #include "wm.h"
 
+#include "cpp_test.h"
+
 int main(int argc, const char* argv[])
 {
 	debug_set_print_mask(k_print_info | k_print_warning | k_print_error);
 	debug_install_exception_handler();
 
 	timer_startup();
+
+	cpp_test_function(42);
 
 	heap_t* heap = heap_create(2 * 1024 * 1024);
 	fs_t* fs = fs_create(heap, 8);
